@@ -5,6 +5,7 @@
 
     <script type="text/javascript" src="jet.js"></script>
     <script type="text/javascript" src="bullet.js"></script>
+    <script type="text/javascript" src="triangle.js"></script>
 
     <script>
     var KEYCODE_ENTER = 13;
@@ -38,6 +39,7 @@
 
     var jet;
     var bullets = [];
+    var enemies = [];
 
     //register key functions
     document.onkeydown = handleKeyDown;
@@ -46,7 +48,12 @@
     var canvasWidth;
     var canvasHeight;
     var gridColumns = 9;
-    var gridRows = 5; 
+    var gridRows = 5;
+
+    var FPS = 30;
+
+    var spawnEnemyTimer;
+    var spawnEnemyTimerDefault = 3 * FPS;
 
     function init() {
         stage = new createjs.Stage("canvas");
@@ -62,7 +69,7 @@
         stage.addChild(jet);
 
         createjs.Ticker.useRAF = true; // learn more about this
-        createjs.Ticker.setFPS(30);
+        createjs.Ticker.setFPS(FPS);
         createjs.Ticker.addEventListener("tick", tick);
     }
 
@@ -75,6 +82,7 @@
         leftStickY = 0;
         rightStickX = 0;
         rihtStickY = 0;
+        spawnEnemyTimer = spawnEnemyTimerDefault;
     }
 
     function tick(event) {
@@ -84,9 +92,22 @@
         // update game objects
         updateJet();
         updateBullets();
+        updateEnemies();
 
         // draw
         stage.update();
+    }
+
+    // Returns a random integer between min and max
+    // Using Math.round() will give you a non-uniform distribution!
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    function spawnEnemy(event) {
+        var triangle = new Triangle(getRandomInt(0, canvasWidth), getRandomInt(0, canvasHeight));
+        stage.addChild(triangle);
+        enemies.push(triangle);
     }
 
     function updateJet(event) {
@@ -104,6 +125,7 @@
             stage.addChild(newBullet);
         }
 
+        // move and remove bullets
         bullets.filter(function(bullet) {
             bullet.tick(event);
 
@@ -113,6 +135,21 @@
             }
             return false;
         });
+    }
+
+    function updateEnemies(event) {
+        // spawn enemies
+        if (spawnEnemyTimer == 0) {
+            spawnEnemy();
+            spawnEnemyTimer = spawnEnemyTimerDefault;
+        } else {
+            spawnEnemyTimer -= 1;
+        }
+
+        // move enemies
+        for(var i = 0; i < enemies.length; i++){
+            enemies[i].tick(event);
+        }
     }
 
     function checkGamepad() {
