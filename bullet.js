@@ -45,7 +45,7 @@
 	}
 
 	p.inBounds = function() {
-        return this.x > 0 && this.y > 0 && this.x <= window.stage.canvas.width && this.y <= window.stage.canvas.width;
+        return this.x > 0 && this.y > 0 && this.x <= window.canvasWidth && this.y <= window.canvasHeight;
     }
 
 	window.Bullet = Bullet;

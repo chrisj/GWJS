@@ -31,10 +31,10 @@
 
     var stage;
     var gamepad
-    var leftStickX = 0;
-    var leftStickY = 0;
-    var rightStickX = 0;
-    var rightStickY = 0;
+    var leftStickX;
+    var leftStickY;
+    var rightStickX;
+    var rightStickY;
 
     var jet;
     var bullets = [];
@@ -43,8 +43,17 @@
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
 
+    var canvasWidth;
+    var canvasHeight;
+    var gridColumns = 9;
+    var gridRows = 5; 
+
     function init() {
         stage = new createjs.Stage("canvas");
+        canvasWidth = window.stage.canvas.width;
+        canvasHeight = window.stage.canvas.height;
+
+        restart();
 
         jet = new Jet();
         jet.x = 100;
@@ -52,9 +61,20 @@
 
         stage.addChild(jet);
 
-        // createjs.Ticker.useRAF = true; // learn more about this
+        createjs.Ticker.useRAF = true; // learn more about this
         createjs.Ticker.setFPS(30);
         createjs.Ticker.addEventListener("tick", tick);
+    }
+
+    function restart() {
+        stage.removeAllChildren();
+
+        drawGrid();
+
+        leftStickX = 0;
+        leftStickY = 0;
+        rightStickX = 0;
+        rihtStickY = 0;
     }
 
     function tick(event) {
@@ -158,6 +178,31 @@
 
             document.getElementById("debug").innerHTML = debug;
         }
+    }
+
+    function drawGrid() {
+        var grid = new createjs.Shape();
+        var g = grid.graphics;
+
+        var pixelsPerGridWidth = canvasWidth / gridColumns;
+        var pixelsPerGridHeight = canvasHeight / gridRows;
+
+        // set grid style
+        g.setStrokeStyle(8, "round");
+        g.beginStroke("#000000");
+
+        // set grid lines
+        g.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
+        g.lineTo(canvasWidth, 0);
+
+
+        for(var i = 0; i < gridColumns; i++) {
+            g.moveTo(pixelsPerGridWidth * i, 0).lineTo(pixelsPerGridWidth * i, canvasHeight);
+        }
+
+        // draw grid
+        g.endStroke();
+        stage.addChild(grid);
     }
 
     //allow for WASD and arrow control scheme
