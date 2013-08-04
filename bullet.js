@@ -12,12 +12,14 @@
 	p.vX;
 	p.vY;
 	p.active;
+	p.decay;
 
 	p.initialize = function(x, y, vx, vy) {
 		this.Container_initialize();
 
 		this.active = true;
 		this.reset(x, y, vx, vy);
+		this.decay = 2;
 
 
 		this.bulletShape = new createjs.Shape();
@@ -42,10 +44,25 @@
 	p.tick = function(event) {
 		this.x += this.vX;
 		this.y += this.vY;
+		this.reflect();
 	}
 
 	p.inBounds = function() {
         return this.x > 0 && this.y > 0 && this.x <= window.canvasWidth && this.y <= window.canvasHeight;
+    }
+
+    p.reflect = function() {
+    	if (this.x < 0 || this.x > window.canvasWidth) {
+    		this.vX *= -1;
+    		this.decay -= 1;
+    		return true;
+    	}
+    	if (this.y < 0 || this.y > window.canvasHeight) {
+    		this.vY *= -1;
+    		this.decay -= 1;
+    		return true;
+    	}
+    	return false;
     }
 
 	window.Bullet = Bullet;

@@ -128,11 +128,12 @@
         // move and remove bullets
         bullets.filter(function(bullet) {
             bullet.tick(event);
-
-            if(!bullet.inBounds()){
+                
+            if (bullet.decay == 0) {
                 stage.removeChild(bullet);
                 return true;
             }
+
             return false;
         });
     }
@@ -220,22 +221,36 @@
     function drawGrid() {
         var grid = new createjs.Shape();
         var g = grid.graphics;
+        var gh = grid.graphics;
 
         var pixelsPerGridWidth = canvasWidth / gridColumns;
         var pixelsPerGridHeight = canvasHeight / gridRows;
 
         // set grid style
-        g.setStrokeStyle(8, "round");
+        g.setStrokeStyle(.5, "round");
         g.beginStroke("#000000");
 
         // set grid lines
         g.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
         g.lineTo(canvasWidth, 0);
 
+        gh.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
+        gh.lineTo(0, canvasHeight);
+
 
         for(var i = 0; i < gridColumns; i++) {
             g.moveTo(pixelsPerGridWidth * i, 0).lineTo(pixelsPerGridWidth * i, canvasHeight);
         }
+
+        for(var i = 0; i < gridRows; i++) {
+            gh.moveTo(0, pixelsPerGridHeight * i).lineTo(canvasWidth, pixelsPerGridHeight * i);
+        }
+
+        //outline grid
+        
+        g.setStrokeStyle(12);
+        g.beginFill();
+        g.drawRect(0,0,canvasWidth,canvasHeight);
 
         // draw grid
         g.endStroke();
