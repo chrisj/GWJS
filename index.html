@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="resources/createjs-2013.05.14.min.js"></script>
+
+    <script type="text/javascript" src="jet.js"></script>
+    <script type="text/javascript" src="bullet.js"></script>
+
+    <script>
+    var KEYCODE_ENTER = 13;
+    var KEYCODE_SPACE = 32;
+    var KEYCODE_UP = 38;
+    var KEYCODE_DOWN = 40;
+    var KEYCODE_LEFT = 37;
+    var KEYCODE_RIGHT = 39;
+    var KEYCODE_W = 87;
+    var KEYCODE_A = 65;
+    var KEYCODE_S = 83;
+    var KEYCODE_D = 68;
+
+    var leftHeld;             //is the user holding a move left command
+    var rightHeld;            //is the user holding a move right command
+    var upHeld;               //is the user holding a move up command
+    var downHeld;             //is the user holding a move down command
+
+    var shootUpHeld;
+    var shootDownHeld;
+    var shootLeftHeld;
+    var shootRightHeld;
+
+
+    var stage;
+    var gamepad
+    var leftStickX = 0;
+    var leftStickY = 0;
+    var rightStickX = 0;
+    var rightStickY = 0;
+
+    var jet;
+    var bullets = [];
+
+    //register key functions
+    document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
+
+    function init() {
+        stage = new createjs.Stage("canvas");
+
+        jet = new Jet();
+        jet.x = 100;
+        jet.y = 100;
+
+        stage.addChild(jet);
+
+        // createjs.Ticker.useRAF = true; // learn more about this
+        createjs.Ticker.setFPS(30);
+        createjs.Ticker.addEventListener("tick", tick);
+    }
+
+    function tick(event) {
+        // input
+        checkGamepad();
+
+        // update game objects
+        updateJet();
+        updateBullets();
+
+        // draw
+        stage.update();
+    }
+
+    function updateJet(event) {
+        if (distanceToOrigin(leftStickX, leftStickY) > .5) {
+            jet.x += leftStickX * 15;
+            jet.y += leftStickY * 15;
+        }
+    }
+
+    function updateBullets(event) {
+        // add new bullet if needed
+        if (distanceToOrigin(rightStickX, rightStickY) > .3) {
+            var newBullet = new Bullet(jet.x, jet.y, rightStickX * 20, rightStickY * 20);
+            bullets.push(newBullet);
+            stage.addChild(newBullet);
+        }
+
+        bullets.filter(function(bullet) {
+            bullet.tick(event);
+
+            if(!bullet.inBounds()){
+                stage.removeChild(bullet);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    function checkGamepad() {
+        var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
+
+        var debug = '';
+        if (gamepads.length) {
+            pad = gamepads[0]
+
+            if (pad && pad.axes.length == 4) {
+                leftStickX = pad.axes[0];
+                leftStickY = pad.axes[1];
+                rightStickX = pad.axes[2];
+                rightStickY = pad.axes[3];
+            } else {
+                // resort to keyboard input
+
+                    leftStickX = 0;
+                    leftStickY = 0;
+                    rightStickX = 0;
+                    rightStickY = 0;
+
+                if (upHeld) {
+                    leftStickY -= 1;
+                }
+                if (downHeld) {
+                    leftStickY += 1;
+                }
+                if (leftHeld) {
+                    leftStickX -= 1;
+                }
+                if (rightHeld) {
+                    leftStickX += 1;
+                }
+
+                if (distanceToOrigin(leftStickX, leftStickY) > 1) {
+                    leftStickX *= Math.sqrt(1/2);
+                    leftStickY *= Math.sqrt(1/2);
+                }
+
+
+                if (shootUpHeld) {
+                    rightStickY -= 1;
+                }
+                if (shootDownHeld) {
+                    rightStickY += 1;
+                }
+                if (shootLeftHeld) {
+                    rightStickX -= 1;
+                }
+                if (shootRightHeld) {
+                    rightStickX += 1;
+                }
+
+                if (distanceToOrigin(rightStickX, rightStickY) > 1) {
+                    rightStickX *= Math.sqrt(1/2);
+                    rightStickY *= Math.sqrt(1/2);
+                }
+            }
+
+            debug = 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";
+            debug += 'RightStick (' + rightStickX + ", " + rightStickY + ")<br/>";
+
+            document.getElementById("debug").innerHTML = debug;
+        }
+    }
+
+    //allow for WASD and arrow control scheme
+    function handleKeyDown(e) {
+        //cross browser issues exist
+        if(!e){ var e = window.event; }
+        switch(e.keyCode) {
+            case KEYCODE_W:     upHeld = true; return false;
+            case KEYCODE_A:     leftHeld = true; return false;
+            case KEYCODE_S:     downHeld = true; return false;
+            case KEYCODE_D:     rightHeld = true; return false;
+            case KEYCODE_UP:    shootUpHeld = true; return false;
+            case KEYCODE_DOWN:  shootDownHeld = true; return false;
+            case KEYCODE_LEFT:  shootLeftHeld = true; return false;
+            case KEYCODE_RIGHT: shootRightHeld = true; return false;
+        }
+    }
+
+    function handleKeyUp(e) {
+        //cross browser issues exist
+        if(!e){ var e = window.event; }
+        switch(e.keyCode) {
+            case KEYCODE_W:     upHeld = false; break;
+            case KEYCODE_A:     leftHeld = false; break;
+            case KEYCODE_S:     downHeld = false; break;
+            case KEYCODE_D:     rightHeld = false; break;
+            case KEYCODE_UP:    shootUpHeld = false; break;
+            case KEYCODE_DOWN:  shootDownHeld = false; break;
+            case KEYCODE_LEFT:  shootLeftHeld = false; break;
+            case KEYCODE_RIGHT: shootRightHeld = false; break;
+        }
+    }
+
+    function distanceToOrigin(x, y) {
+        return Math.sqrt((x * x) + (y * y))
+    }
+
+    </script>
+</head>
+<body onLoad="init();">
+    <canvas id="canvas" width="900" height="500"></canvas>
+    <div id="debug"></div>
+</body>
+</html>
