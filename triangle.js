@@ -8,13 +8,14 @@
 
 	p.Container_initialize = p.initialize;
 	p.triangleShape;
+	p.active;
 
 	p.initialize = function(x, y) {
 		this.Container_initialize();
 
 		this.x = x;
 		this.y = y;
-
+		this.active = true;
 
 		this.triangleShape = new createjs.Shape();
 		this.addChild(this.triangleShape);
@@ -29,11 +30,43 @@
 	}
 
 	p.tick = function(event) {
-		// move the triangle toward the jet
+		if (this.active) {
+
+			// move the triangle toward the jet
+			var target = window.jet;
+
+			this.x += 5;
+			this.y += 5;
+
+			this.checkCollision();
+		}
+	}
+
+	p.checkCollision = function(event) {
+		// check jet
 		var target = window.jet;
 
-		this.x += 5;
-		this.y += 5;
+		var distance = distanceBetweenPoints(this.x, this.y, target.x, target.y);
+
+		if (distance < 30) {
+			window.destroyJet();
+		}
+
+		for (var i = 0; i < window.bullets.length; i++) {
+			var enemy = window.bullets[i];
+
+			var distance = distanceBetweenPoints(this.x, this.y, enemy.x, enemy.y);
+
+			if (distance < 17) {
+				this.destroy();
+				break;
+			}
+		}
+	}
+
+	p.destroy = function() {
+		this.active = false;
+		window.stage.removeChild(this);
 	}
 
 	p.inBounds = function() {

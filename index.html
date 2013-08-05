@@ -3,6 +3,7 @@
 <head>
     <script type="text/javascript" src="resources/createjs-2013.05.14.min.js"></script>
 
+    <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript" src="jet.js"></script>
     <script type="text/javascript" src="bullet.js"></script>
     <script type="text/javascript" src="triangle.js"></script>
@@ -19,6 +20,22 @@
     var KEYCODE_S = 83;
     var KEYCODE_D = 68;
 
+    var KEYCODE_P = 80; // pause the game
+
+    // display
+    var FPS = 30;
+    var gridColumns = 9;
+    var gridRows = 5;
+    var canvasWidth;
+    var canvasHeight;
+
+    // input
+    var gamepad
+    var leftStickX;
+    var leftStickY;
+    var rightStickX;
+    var rightStickY;
+
     var leftHeld;             //is the user holding a move left command
     var rightHeld;            //is the user holding a move right command
     var upHeld;               //is the user holding a move up command
@@ -30,30 +47,21 @@
     var shootRightHeld;
 
 
-    var stage;
-    var gamepad
-    var leftStickX;
-    var leftStickY;
-    var rightStickX;
-    var rightStickY;
 
+    var stage;
+    var paused = false;
+
+    // game elements
     var jet;
     var bullets = [];
     var enemies = [];
+    var spawnEnemyTimer;
+    var spawnEnemyTimerDefault = 3 * FPS;
 
     //register key functions
     document.onkeydown = handleKeyDown;
     document.onkeyup = handleKeyUp;
 
-    var canvasWidth;
-    var canvasHeight;
-    var gridColumns = 9;
-    var gridRows = 5;
-
-    var FPS = 30;
-
-    var spawnEnemyTimer;
-    var spawnEnemyTimerDefault = 3 * FPS;
 
     function init() {
         stage = new createjs.Stage("canvas");
@@ -89,13 +97,15 @@
         // input
         checkGamepad();
 
-        // update game objects
-        updateJet();
-        updateBullets();
-        updateEnemies();
+        if (!paused) {
+            // update game objects
+            updateJet();
+            updateBullets();
+            updateEnemies();
 
-        // draw
-        stage.update();
+            // draw
+            stage.update();
+        }
     }
 
     // Returns a random integer between min and max
@@ -117,6 +127,16 @@
         }
     }
 
+    function destroyJet() {
+        var text = new createjs.Text("EXPLOSION!", "72px Arial", "#ff7700");
+        text.x = canvasWidth / 2;
+        text.y = canvasHeight / 2;
+        stage.addChild(text);
+        stage.update();
+
+        pauseGame();
+    }
+
     function updateBullets(event) {
         // add new bullet if needed
         if (distanceToOrigin(rightStickX, rightStickY) > .3) {
@@ -126,10 +146,10 @@
         }
 
         // move and remove bullets
-        bullets.filter(function(bullet) {
+        bullets.myfilter(function(bullet) {
             bullet.tick(event);
                 
-            if (bullet.decay == 0) {
+            if (bullet.decay <= 0) {
                 stage.removeChild(bullet);
                 return true;
             }
@@ -257,6 +277,10 @@
         stage.addChild(grid);
     }
 
+    function pauseGame() {
+        paused = !paused;
+    }
+
     //allow for WASD and arrow control scheme
     function handleKeyDown(e) {
         //cross browser issues exist
@@ -270,6 +294,7 @@
             case KEYCODE_DOWN:  shootDownHeld = true; return false;
             case KEYCODE_LEFT:  shootLeftHeld = true; return false;
             case KEYCODE_RIGHT: shootRightHeld = true; return false;
+            case KEYCODE_P: pauseGame(); return false;
         }
     }
 
@@ -287,11 +312,6 @@
             case KEYCODE_RIGHT: shootRightHeld = false; break;
         }
     }
-
-    function distanceToOrigin(x, y) {
-        return Math.sqrt((x * x) + (y * y))
-    }
-
     </script>
 </head>
 <body onLoad="init();">
