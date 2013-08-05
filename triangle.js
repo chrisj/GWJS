@@ -26,7 +26,7 @@
 	p.makeShape = function () {
 		var g = this.triangleShape.graphics;
 		g.clear();
-		g.beginFill("green").drawCircle(0, 0, 15);
+		g.setStrokeStyle(2, "round").beginStroke("blue").drawPolyStar(0, 0, 15, 3, 0, 0);
 	}
 
 	p.tick = function(event) {
@@ -35,8 +35,14 @@
 			// move the triangle toward the jet
 			var target = window.jet;
 
-			this.x += 5;
-			this.y += 5;
+			var deltax = target.x - this.x;
+			var deltay = target.y - this.y;
+
+			var angle = Math.atan2(deltay, deltax);
+			var speed = 6;
+
+			this.x += speed * Math.cos(angle);
+			this.y += speed * Math.sin(angle);
 
 			this.checkCollision();
 		}
@@ -49,7 +55,7 @@
 		var distance = distanceBetweenPoints(this.x, this.y, target.x, target.y);
 
 		if (distance < 30) {
-			window.destroyJet();
+			target.destroy();
 		}
 
 		for (var i = 0; i < window.bullets.length; i++) {
@@ -73,5 +79,8 @@
         return this.x > 0 && this.y > 0 && this.x <= window.canvasWidth && this.y <= window.canvasHeight;
     }
 
+    function square(x) {
+    	return x * x;
+    }
 	window.Triangle = Triangle;
 }(window))

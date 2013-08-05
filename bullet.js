@@ -19,7 +19,7 @@
 
 		this.active = true;
 		this.reset(x, y, vx, vy);
-		this.decay = 2;
+		this.decay = 1;
 
 
 		this.bulletShape = new createjs.Shape();
@@ -31,7 +31,7 @@
 	p.makeShape = function () {
 		var g = this.bulletShape.graphics;
 		g.clear();
-		g.beginFill("blue").drawCircle(0, 0, 4);
+		g.beginFill("yellow").drawCircle(0, 0, 4);
 	}
 
 	p.reset = function(x, y, vx, vy) {
