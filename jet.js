@@ -27,7 +27,7 @@
 	p.makeShape = function () {
 		var g = this.jetBody.graphics;
 		g.clear();
-		g.setStrokeStyle(2, "round").beginStroke("red").drawCircle(0, 0, this.radius);
+		g.setStrokeStyle(3, "round").beginStroke("red").drawCircle(0, 0, this.radius);
 	}
 
 	p.tick = function (event) {
@@ -38,8 +38,11 @@
             this.x += vX;
             this.y += vY;
 
-            if (!this.inBounds()) {
+            if (!this.inBoundsX()) {
             	this.x -= vX;
+            }
+
+            if (! this.inBoundsY()) {
             	this.y -= vY;
             }
         }
@@ -68,8 +71,12 @@
         window.pauseGame();
     }
 
-    p.inBounds = function() {
-        return this.x - this.radius > 0 && this.y - this.radius > 0 && this.x + this.radius <= window.canvasWidth && this.y + this.radius <= window.canvasHeight;
+    p.inBoundsX = function() {
+        return this.x - this.radius > 0 && this.x + this.radius <= window.canvasWidth;
+    }
+
+	p.inBoundsY = function() {
+        return this.y - this.radius > 0 && this.y + this.radius <= window.canvasHeight;
     }
 
 	window.Jet = Jet;
