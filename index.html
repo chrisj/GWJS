@@ -27,7 +27,7 @@
     var bullets = [];
     var enemies = [];
     var spawnEnemyTimer;
-    var spawnEnemyTimerDefault = 0.3 * FPS;
+    var spawnEnemyTimerDefault = 1 * FPS;
 
     function init() {
         //register key functions
@@ -125,7 +125,7 @@
 
         // set grid style
         g.setStrokeStyle(.5, "round");
-        g.beginStroke("#000000");
+        g.beginStroke("#FFFFFF");
 
         // set grid lines
         g.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
