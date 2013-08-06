@@ -22,7 +22,7 @@
 		this.addChild(this.jetBody);
 
 		this.makeShape();
-		this.makeAnimations();
+		// this.makeAnimations();
 	}
 
 	p.makeShape = function () {
@@ -32,7 +32,7 @@
 	}
 
 	p.makeAnimations = function () {
-		createjs.Tween.get(this,{loop:true}).to({scaleX:1.5,scaleY:1.5},1000,createjs.Ease.bounceOut).to({scaleX:1,scaleY:1},1000,createjs.Ease.bounceOut);
+		createjs.Tween.get(this,{loop:true}).to({scaleX:1.2,scaleY:1.2},1000,createjs.Ease.quadOut).to({scaleX:1,scaleY:1},1000,createjs.Ease.quadIn);
 	}
 
 	p.tick = function (event) {
@@ -54,22 +54,22 @@
 
         // fire bullet
         if (this.reload == 0 && distanceToOrigin(window.rightStickX, window.rightStickY) > .3) {
-
-            // normalize
-            var rightMagnitude = distanceToOrigin(window.rightStickX, window.rightStickY);
-
-
-
-            var newBullet = new Bullet(jet.x, jet.y, rightStickX/rightMagnitude * 20, rightStickY/rightMagnitude * 20);
-            window.bullets.push(newBullet);
-            window.stage.addChild(newBullet);
-
-            this.reload = 3;
+            this.shoot();
         }
 
         if (this.reload > 0) {
         	this.reload -= 1;
         }
+    }
+
+    p.shoot = function () {
+        // normalize
+        var rightMagnitude = distanceToOrigin(window.rightStickX, window.rightStickY);
+        var newBullet = new Bullet(jet.x, jet.y, rightStickX/rightMagnitude * 20, rightStickY/rightMagnitude * 20);
+        window.bullets.push(newBullet);
+        window.stage.addChild(newBullet);
+
+        this.reload = 3;
     }
 
     p.destroy = function () {

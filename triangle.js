@@ -9,6 +9,7 @@
 	p.Container_initialize = p.initialize;
 	p.triangleShape;
 	p.active;
+	p.radius;
 
 	p.initialize = function(x, y) {
 		this.Container_initialize();
@@ -16,6 +17,7 @@
 		this.x = x;
 		this.y = y;
 		this.active = true;
+		this.radius = 15;
 
 		this.triangleShape = new createjs.Shape();
 		this.addChild(this.triangleShape);
@@ -26,7 +28,7 @@
 	p.makeShape = function () {
 		var g = this.triangleShape.graphics;
 		g.clear();
-		g.setStrokeStyle(2, "round").beginStroke("blue").drawPolyStar(0, 0, 15, 3, 0, 0);
+		g.setStrokeStyle(2, "round").beginStroke("blue").drawPolyStar(0, 0, this.radius, 3, 0, 0);
 	}
 
 	p.tick = function(event) {
@@ -56,7 +58,7 @@
 
 		var distance = distanceBetweenPoints(this.x, this.y, target.x, target.y);
 
-		if (distance < 30) {
+		if (distance < this.radius + target.radius) {
 			target.destroy();
 		}
 
@@ -65,7 +67,7 @@
 
 			var distance = distanceBetweenPoints(this.x, this.y, enemy.x, enemy.y);
 
-			if (distance < 17) {
+			if (distance < this.radius + enemy.radius  - 2) {
 				this.destroy();
 				break;
 			}

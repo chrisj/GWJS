@@ -29,26 +29,23 @@
     var spawnEnemyTimer;
     var spawnEnemyTimerDefault = 1 * FPS;
 
+    var clockText;
+    var startTime;
+
     function init() {
         //register key functions
         document.onkeydown = handleKeyDown;
         document.onkeyup = handleKeyUp;
+
+        createjs.Ticker.useRAF = true; // learn more about this
+        createjs.Ticker.setFPS(FPS);
+        createjs.Ticker.addEventListener("tick", tick);
 
         stage = new createjs.Stage("canvas");
         canvasWidth = window.stage.canvas.width;
         canvasHeight = window.stage.canvas.height;
 
         restart();
-
-        jet = new Jet();
-        jet.x = canvasWidth / 2;
-        jet.y = canvasHeight / 2;
-
-        stage.addChild(jet);
-
-        createjs.Ticker.useRAF = true; // learn more about this
-        createjs.Ticker.setFPS(FPS);
-        createjs.Ticker.addEventListener("tick", tick);
     }
 
     function restart() {
@@ -61,6 +58,22 @@
         rightStickX = 0;
         rihtStickY = 0;
         spawnEnemyTimer = spawnEnemyTimerDefault;
+
+        clockText = new createjs.Text("0", "20px Arial", "#ff7700");
+        clockText.x = canvasWidth / 2;
+        clockText.y = 10;
+
+        stage.addChild(clockText);
+        createjs.Tween.get(clockText,{loop:true}).to({alpha:1},500,createjs.Ease.quadOut).to({alpha:0.2},500,createjs.Ease.quadIn);
+
+
+        startTime = createjs.Ticker.getTime();
+
+        jet = new Jet();
+        jet.x = canvasWidth / 2;
+        jet.y = canvasHeight / 2;
+
+        stage.addChild(jet);
     }
 
     function tick(event) {
@@ -72,6 +85,8 @@
             jet.tick(event);
             updateBullets();
             updateEnemies();
+
+            updateClock();
 
             // draw
             stage.update();
@@ -113,6 +128,12 @@
         for(var i = 0; i < enemies.length; i++){
             enemies[i].tick(event);
         }
+    }
+
+    function updateClock(event) {
+        var deltaMS = createjs.Ticker.getTime() - startTime;
+        var deltaS = Math.floor(deltaMS / 1000);
+        clockText.text = deltaS;
     }
 
     function drawGrid() {
