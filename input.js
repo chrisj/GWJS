@@ -22,6 +22,8 @@ var rightHeld;            //is the user holding a move right command
 var upHeld;               //is the user holding a move up command
 var downHeld;             //is the user holding a move down command
 
+var b0Held;
+
 var shootUpHeld;
 var shootDownHeld;
 var shootLeftHeld;
@@ -42,11 +44,17 @@ function checkGamepad() {
             }
         }
 
-        if (pad && pad.axes.length == 4) {
+        if (pad && pad.axes.length == 4 && pad.buttons.length > 1) {
             leftStickX = pad.axes[0];
             leftStickY = pad.axes[1];
             rightStickX = pad.axes[2];
             rightStickY = pad.axes[3];
+
+            if (b0Held && !pad.buttons[0]) {
+                window.restart();
+            }
+
+            b0Held = pad.buttons[0];
         } else {
             // resort to keyboard input
 

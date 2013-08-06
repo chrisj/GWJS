@@ -64,6 +64,8 @@
         clockText.y = 10;
 
         stage.addChild(clockText);
+        createjs.Tween.get(clockText,{loop:true}).to({alpha:1},500,createjs.Ease.quadOut).to({alpha:0.2},500,createjs.Ease.quadIn);
+
 
         startTime = createjs.Ticker.getTime();
 

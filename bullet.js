@@ -13,6 +13,7 @@
 	p.vY;
 	p.active;
 	p.decay;
+	p.radius;
 
 	p.initialize = function(x, y, vx, vy) {
 		this.Container_initialize();
@@ -20,6 +21,7 @@
 		this.active = true;
 		this.reset(x, y, vx, vy);
 		this.decay = 1;
+		this.radius = 4;
 
 
 		this.bulletShape = new createjs.Shape();
@@ -31,7 +33,7 @@
 	p.makeShape = function () {
 		var g = this.bulletShape.graphics;
 		g.clear();
-		g.beginFill("yellow").drawCircle(0, 0, 4);
+		g.beginFill("yellow").drawCircle(0, 0, this.radius);
 	}
 
 	p.reset = function(x, y, vx, vy) {
