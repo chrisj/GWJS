@@ -32,7 +32,15 @@ function checkGamepad() {
 
     var debug = '';
     if (gamepads.length) {
-        pad = gamepads[0]
+
+        var pad;
+
+        for (var i = 0; i < gamepads.length; i++) {
+            if (gamepads[i]) {
+                pad = gamepads[i];
+                break;
+            }
+        }
 
         if (pad && pad.axes.length == 4) {
             leftStickX = pad.axes[0];
@@ -60,10 +68,10 @@ function checkGamepad() {
                 leftStickX += 1;
             }
 
-            if (distanceToOrigin(leftStickX, leftStickY) > 1) {
-                leftStickX *= Math.sqrt(1/2);
-                leftStickY *= Math.sqrt(1/2);
-            }
+            // if (distanceToOrigin(leftStickX, leftStickY) > 1) {
+            //     leftStickX *= Math.sqrt(1/2);
+            //     leftStickY *= Math.sqrt(1/2);
+            // }
 
 
             if (shootUpHeld) {
@@ -79,10 +87,10 @@ function checkGamepad() {
                 rightStickX += 1;
             }
 
-            if (distanceToOrigin(rightStickX, rightStickY) > 1) {
-                rightStickX *= Math.sqrt(1/2);
-                rightStickY *= Math.sqrt(1/2);
-            }
+            // if (distanceToOrigin(rightStickX, rightStickY) > 1) {
+            //     rightStickX *= Math.sqrt(1/2);
+            //     rightStickY *= Math.sqrt(1/2);
+            // }
         }
 
         debug = 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";

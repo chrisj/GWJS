@@ -44,6 +44,8 @@
 			this.x += speed * Math.cos(angle);
 			this.y += speed * Math.sin(angle);
 
+			this.rotation = toDegrees(angle);
+
 			this.checkCollision();
 		}
 	}
