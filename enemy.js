@@ -12,6 +12,7 @@
 	p.active;
 	p.radius;
 	p.velocity;
+	p.rotatesToTarget;
 
 	p.initialize = function(x, y, radius, velocity) {
 		this.Container_initialize();
@@ -21,6 +22,7 @@
 		this.radius = radius;
 		this.velocity = velocity;
 		this.active = true;
+		this.rotatesToTarget = true;
 
 		this.shape = new createjs.Shape();
 		this.addChild(this.shape);
@@ -43,7 +45,9 @@
 			this.x += this.velocity * Math.cos(angle);
 			this.y += this.velocity * Math.sin(angle);
 
-			this.rotation = toDegrees(angle);
+			if (this.rotatesToTarget) {
+				this.rotation = toDegrees(angle);
+			}
 
 			this.checkCollision();
 		}

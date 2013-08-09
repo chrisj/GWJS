@@ -9,7 +9,7 @@
 	p.Enemy_initialize = p.initialize;
 
 	p.initialize = function(x, y) {
-		this.Enemy_initialize(x, y, 15, 6);
+		this.Enemy_initialize(x, y, 15, 3);
 	}
 
 	p.makeShape = function () {
