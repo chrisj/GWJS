@@ -82,6 +82,10 @@
         window.pauseGame();
     }
 
+    p.inBounds = function() {
+        return this.inBoundsX() && this.inBoundsY();
+    }
+
     p.inBoundsX = function() {
         return this.x - this.radius > 0 && this.x + this.radius <= window.canvasWidth;
     }

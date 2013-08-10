@@ -57,11 +57,10 @@ function checkGamepad() {
             b0Held = pad.buttons[0];
         } else {
             // resort to keyboard input
-
-                leftStickX = 0;
-                leftStickY = 0;
-                rightStickX = 0;
-                rightStickY = 0;
+            leftStickX = 0;
+            leftStickY = 0;
+            rightStickX = 0;
+            rightStickY = 0;
 
             if (upHeld) {
                 leftStickY -= 1;
@@ -76,12 +75,6 @@ function checkGamepad() {
                 leftStickX += 1;
             }
 
-            // if (distanceToOrigin(leftStickX, leftStickY) > 1) {
-            //     leftStickX *= Math.sqrt(1/2);
-            //     leftStickY *= Math.sqrt(1/2);
-            // }
-
-
             if (shootUpHeld) {
                 rightStickY -= 1;
             }
@@ -94,11 +87,6 @@ function checkGamepad() {
             if (shootRightHeld) {
                 rightStickX += 1;
             }
-
-            // if (distanceToOrigin(rightStickX, rightStickY) > 1) {
-            //     rightStickX *= Math.sqrt(1/2);
-            //     rightStickY *= Math.sqrt(1/2);
-            // }
         }
 
         debug = 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";

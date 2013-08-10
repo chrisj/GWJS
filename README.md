@@ -8,3 +8,5 @@ TO DO
 3) special abilities
 4) wave game play - clock modified for rounds
 5) upgrades
+
+[Try out our game!](http://htmlpreview.github.io/?https://github.com/csjordan/GWJS/blob/master/index.html)
