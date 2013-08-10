@@ -53,7 +53,7 @@
         }
 
         // fire bullet
-        if (this.reload == 0 && distanceToOrigin(window.rightStickX, window.rightStickY) > .3) {
+        if (this.reload === 0 && distanceToOrigin(window.rightStickX, window.rightStickY) > .3) {
             this.shoot();
         }
 

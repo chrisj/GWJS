@@ -113,7 +113,7 @@
         // move and remove bullets
         bullets.myfilter(function(bullet) {
             bullet.tick(event);
-                
+
             if (bullet.decay <= 0) {
                 stage.removeChild(bullet);
                 return true;
@@ -125,7 +125,7 @@
 
     function updateEnemies(event) {
         // spawn enemies
-        if (spawnEnemyTimer == 0) {
+        if (spawnEnemyTimer === 0) {
             spawnEnemy();
             spawnEnemyTimer = spawnEnemyTimerDefault;
         } else {
@@ -173,7 +173,7 @@
         }
 
         //outline grid
-        
+
         g.setStrokeStyle(12);
         g.beginFill();
         g.drawRect(0,0,canvasWidth,canvasHeight);

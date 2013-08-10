@@ -44,7 +44,7 @@ function checkGamepad() {
             }
         }
 
-        if (pad && pad.axes.length == 4 && pad.buttons.length > 1) {
+        if (pad && pad.axes.length === 4 && pad.buttons.length > 1) {
             leftStickX = pad.axes[0];
             leftStickY = pad.axes[1];
             rightStickX = pad.axes[2];
