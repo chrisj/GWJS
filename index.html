@@ -8,7 +8,9 @@
     <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript" src="jet.js"></script>
     <script type="text/javascript" src="bullet.js"></script>
+    <script type="text/javascript" src="enemy.js"></script>
     <script type="text/javascript" src="triangle.js"></script>
+    <script type="text/javascript" src="square.js"></script>
     <script type="text/javascript" src="input.js"></script>
 
     <script>
@@ -96,9 +98,15 @@
     function spawnEnemy(event) {
         var randomLocations = [[10, 10], [canvasWidth - 10, canvasHeight - 10], [10, canvasHeight - 10], [canvasWidth - 10, 10]];
         var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
-        var triangle = new Triangle(location[0], location[1]);
-        stage.addChild(triangle);
-        enemies.push(triangle);
+        var randomEnemyType = Math.floor(Math.random() * 2);
+        var enemy;
+        switch(randomEnemyType) {
+            case 0: enemy = new Triangle(location[0], location[1]); break;
+            case 1: enemy = new Square(location[0], location[1]); break;
+        }
+
+        stage.addChild(enemy);
+        enemies.push(enemy);
     }
 
     function updateBullets(event) {
