@@ -28,12 +28,9 @@
 		this.addChild(this.bulletShape);
 
 		this.makeShape();
-	}
 
-	p.makeShape = function () {
-		var g = this.bulletShape.graphics;
-		g.clear();
-		g.beginFill("yellow").drawCircle(0, 0, this.radius);
+		var angle = Math.atan2(vy, vx);
+		this.rotation = toDegrees(angle);
 	}
 
 	p.reset = function(x, y, vx, vy) {
@@ -43,9 +40,15 @@
 		this.vY = vy;
 	}
 
+	p.makeShape = function () {
+		var g = this.bulletShape.graphics;
+		g.clear();
+		g.beginFill("yellow").drawCircle(0, 0, this.radius);
+	}
+
 	p.tick = function(event) {
-		this.x += this.vX;
-		this.y += this.vY;
+		this.x += (event.delta / 1000) * this.vX * 800;
+		this.y += (event.delta / 1000) * this.vY * 800;
 		this.reflect();
 	}
 
