@@ -1,12 +1,12 @@
 (function (window) {
 
-	function Enemy(x, y, radius, velocity) {
-		this.initialize(x, y, radius, velocity);
+	function Enemy(wx, wy, radius, velocity) {
+		this.initialize(wx, wy, radius, velocity);
 	}
 
-	var p = Enemy.prototype = new createjs.Container();
+	var p = Enemy.prototype = new WorldObject();
 
-	p.Container_initialize = p.initialize;
+	p.WorldObject_initialize = p.initialize;
 
 	p.shape;
 	p.active;
@@ -14,12 +14,10 @@
 	p.velocity;
 	p.rotatesToTarget;
 
-	p.initialize = function(x, y, radius, velocity) {
-		this.Container_initialize();
+	p.initialize = function(wx, wy, radius, velocity) {
+		this.WorldObject_initialize(wx, wy);
 
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
+		this.radius = radius;this.x
 		this.velocity = velocity;
 		this.active = true;
 		this.rotatesToTarget = true;
@@ -37,19 +35,21 @@
 			// move the triangle toward the jet
 			var target = window.jet;
 
-			var deltax = target.x - this.x;
-			var deltay = target.y - this.y;
+			var deltax = target.wx - this.wx;
+			var deltay = target.wy - this.wy;
 
 			var angle = Math.atan2(deltay, deltax);
 
-			this.x += this.velocity * Math.cos(angle);
-			this.y += this.velocity * Math.sin(angle);
+			this.wx += this.velocity * Math.cos(angle);
+			this.wy += this.velocity * Math.sin(angle);
 
 			if (this.rotatesToTarget) {
 				this.rotation = toDegrees(angle);
 			}
 
 			this.checkCollision();
+
+			this.updateCanvasPosition();
 		}
 	}
 
@@ -57,7 +57,7 @@
 		// check jet
 		var target = window.jet;
 
-		var distance = distanceBetweenPoints(this.x, this.y, target.x, target.y);
+		var distance = distanceBetweenPoints(this.wx, this.wy, target.wx, target.wy);
 
 		if (distance < this.radius + target.radius) {
 			target.destroy();
@@ -67,7 +67,7 @@
 		for (var i = 0; i < window.bullets.length; i++) {
 			var enemy = window.bullets[i];
 
-			var distance = distanceBetweenPoints(this.x, this.y, enemy.x, enemy.y);
+			var distance = distanceBetweenPoints(this.wx, this.wy, enemy.wx, enemy.wy);
 
 			if (distance < this.radius + enemy.radius  - 2) {
 				this.destroy();
@@ -81,17 +81,17 @@
 		window.stage.removeChild(this);
 	}
 
-	p.inBounds = function() {
-        return this.inBoundsX() && this.inBoundsY();
-    }
+	// p.inBounds = function() {
+ //        return this.inBoundsX() && this.inBoundsY();
+ //    }
 
-    p.inBoundsX = function() {
-        return this.x - this.radius > 0 && this.x + this.radius <= window.canvasWidth;
-    }
+ //    p.inBoundsX = function() {
+ //        return this.x - this.radius > 0 && this.x + this.radius <= window.worldWidth;
+ //    }
 
-	p.inBoundsY = function() {
-        return this.y - this.radius > 0 && this.y + this.radius <= window.canvasHeight;
-    }
+	// p.inBoundsY = function() {
+ //        return this.y - this.radius > 0 && this.y + this.radius <= window.worldHeight;
+ //    }
 
 	window.Enemy = Enemy;
 }(window))
