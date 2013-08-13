@@ -7,7 +7,7 @@
 	var p = Bullet.prototype = new WorldObject();
 
 	p.WorldObject_initialize = p.initialize;
-	p.bulletShape;
+	p.shape;
 
 	p.vX;
 	p.vY;
@@ -24,10 +24,12 @@
 		this.radius = 4;
 
 
-		this.bulletShape = new createjs.Shape();
-		this.addChild(this.bulletShape);
+		this.shape = new createjs.Shape();
+		this.addChild(this.shape);
 
 		this.makeShape();
+
+		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 
 		var angle = Math.atan2(vy, vx);
 		this.rotation = toDegrees(angle);
@@ -39,7 +41,7 @@
 	}
 
 	p.makeShape = function () {
-		var g = this.bulletShape.graphics;
+		var g = this.shape.graphics;
 		g.clear();
 		g.beginFill("yellow").drawCircle(0, 0, this.radius);
 	}

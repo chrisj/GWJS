@@ -10,6 +10,7 @@
 
 	p.initialize = function(x, y) {
 		this.Enemy_initialize(x, y, 15, 3);
+		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
 	p.makeShape = function () {

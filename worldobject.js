@@ -28,8 +28,8 @@
 
 	p.updateCanvasPosition = function() {
 		var jet = window.jet;
-		this.x = this.wx - jet.wx + jet.x;
-		this.y = this.wy - jet.wy + jet.y;
+		this.x = jet.x + this.wx - jet.wx;
+		this.y = jet.y + this.wy - jet.wy;
 	}
 
 	p.inWorldBounds = function() {

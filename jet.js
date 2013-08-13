@@ -42,6 +42,8 @@
         g.lineTo(this.radius / 4, 0);
         g.lineTo(0 / 4, -3 * this.radius / 5);
         g.lineTo(Math.cos(endAngle) * this.radius, Math.sin(endAngle) * this.radius);
+
+        this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
 	p.tick = function (event) {
@@ -79,19 +81,16 @@
             var angle = Math.atan2(vY, vX);
             this.rotation = toDegrees(angle);
 
+            // switch camera focus from jet to staying in bounds
             if (this.wx <= canvasWidth / 2) {
                 this.x = this.wx;
+            } else if (worldWidth - this.wx <= canvasWidth / 2) {
+                this.x = canvasWidth - (worldWidth - this.wx);
             }
 
             if (this.wy <= canvasHeight / 2) {
                 this.y = this.wy;
-            }
-
-            if (worldWidth - this.wx <= canvasWidth / 2) {
-                this.x = canvasWidth - (worldWidth - this.wx);
-            }
-
-            if (worldHeight - this.wy <= canvasHeight / 2) {
+            } else if (worldHeight - this.wy <= canvasHeight / 2) {
                 this.y = canvasHeight - (worldHeight - this.wy);
             }
         }

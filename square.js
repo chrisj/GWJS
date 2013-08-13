@@ -12,6 +12,7 @@
 		this.Enemy_initialize(x, y, 20, 3);
 		this.rotatesToTarget = false;
 		this.makeAnimations();
+		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
 	p.makeShape = function () {
