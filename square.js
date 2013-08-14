@@ -9,10 +9,9 @@
 	p.Enemy_initialize = p.initialize;
 
 	p.initialize = function(x, y) {
-		this.Enemy_initialize(x, y, 20, 3);
+		this.Enemy_initialize(x, y, 20, 150);
 		this.rotatesToTarget = false;
 		this.makeAnimations();
-		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
 	p.makeShape = function () {

@@ -23,6 +23,7 @@
         this.radiusSqr = this.radius * this.radius;
 
 		this.makeShape();
+        this.shape.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
 	}
 
 	p.makeShape = function () {
@@ -42,8 +43,6 @@
         g.lineTo(this.radius / 4, 0);
         g.lineTo(0 / 4, -3 * this.radius / 5);
         g.lineTo(Math.cos(endAngle) * this.radius, Math.sin(endAngle) * this.radius);
-
-        this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
 	p.tick = function (event) {

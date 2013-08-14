@@ -11,7 +11,7 @@
 	p.initialize = function() {
 		this.WorldObject_initialize(0, 0);
         this.makeShape();
-        this.shape.cache(0,0,worldWidth, worldHeight);
+        this.shape.cache(-5,-5,worldWidth+5, worldHeight+5);
 	}
 
 	p.makeShape = function () {

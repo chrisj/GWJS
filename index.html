@@ -36,7 +36,7 @@
     var grid;
 
     var lastSpawnTime;
-    var timeBetweenSpawns = 1 * 1000;
+    var timeBetweenSpawns = 0.5 * 1000;
 
     var clockText;
     var startTime;
@@ -69,8 +69,9 @@
         rihtStickY = 0;
         lastSpawnTime = 0;
 
-        clockText = new createjs.Text("0", "20px Arial", "#ff7700");
-        clockText.x = worldWidth / 2;
+        clockText = new createjs.Text("0", "40px Arial", "#ff7700");
+        clockText.textAlign = "center";
+        clockText.x = canvasWidth / 2;
         clockText.y = 10;
 
         stage.addChild(clockText);
@@ -148,44 +149,6 @@
         var deltaS = Math.floor(deltaMS / 1000);
         clockText.text = deltaS;
     }
-
-    // function drawGrid() {
-    //     var grid = new createjs.Shape();
-    //     var g = grid.graphics;
-
-    //     var pixelsPerGridWidth = worldWidth / gridColumns;
-    //     var pixelsPerGridHeight = worldHeight / gridRows;
-
-    //     // set grid style
-    //     g.setStrokeStyle(.5, "round");
-    //     g.beginStroke("#ffffff");
-
-    //     // set grid lines
-    //     // g.moveTo(0,0).lineTo(worldWidth, worldHeight);
-    //     // g.lineTo(worldWidth, 0);
-
-    //     // g.moveTo(0,0).lineTo(worldWidth, worldHeight);
-    //     // g.lineTo(0, worldHeight);
-
-
-    //     // for(var i = 0; i < gridColumns; i++) {
-    //     //     g.moveTo(pixelsPerGridWidth * i, 0).lineTo(pixelsPerGridWidth * i, worldHeight);
-    //     // }
-
-    //     // for(var i = 0; i < gridRows; i++) {
-    //     //     g.moveTo(0, pixelsPerGridHeight * i).lineTo(worldWidth, pixelsPerGridHeight * i);
-    //     // }
-
-    //     //outline grid
-
-    //     g.setStrokeStyle(12);
-    //     g.beginFill();
-    //     g.drawRect(0,0,worldWidth,worldHeight);
-
-    //     // draw grid
-    //     g.endStroke();
-    //     stage.addChild(grid);
-    // }
 
     function pauseGame() {
         paused = !paused;

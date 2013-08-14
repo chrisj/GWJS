@@ -30,9 +30,6 @@
 		this.makeShape();
 
 		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
-
-		var angle = Math.atan2(vy, vx);
-		this.rotation = toDegrees(angle);
 	}
 
 	p.reset = function(wx, wy, vx, vy) {
@@ -51,9 +48,6 @@
 		this.wy += (event.delta / 1000) * this.vY * 800;
 
 		this.updateCanvasPosition();
-
-
-
 		this.reflect();
 	}
 

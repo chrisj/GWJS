@@ -25,6 +25,7 @@
 		this.shape = new createjs.Shape();
 		this.addChild(this.shape);
 		this.makeShape();
+		this.shape.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
 	}
 
 	p.makeShape = function () {}
@@ -40,8 +41,8 @@
 
 			var angle = Math.atan2(deltay, deltax);
 
-			this.wx += this.velocity * Math.cos(angle);
-			this.wy += this.velocity * Math.sin(angle);
+			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
+			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
 
 			if (this.rotatesToTarget) {
 				this.rotation = toDegrees(angle);
