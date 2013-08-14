@@ -22,17 +22,16 @@
         g.beginFill();
 
         g.drawRect(0, 0, worldWidth, worldHeight);
-
         g.setStrokeStyle(.5, "round");
 
         var pixelsPerGridWidth = worldWidth / gridColumns;
         var pixelsPerGridHeight = worldHeight / gridRows;
 
-        for(var i = 0; i < gridColumns; i++) {
+        for(var i = 1; i < gridColumns; i++) {
             g.moveTo(pixelsPerGridWidth * i, 0).lineTo(pixelsPerGridWidth * i, worldHeight);
         }
 
-        for(var i = 0; i < gridRows; i++) {
+        for(var i = 1; i < gridRows; i++) {
             g.moveTo(0, pixelsPerGridHeight * i).lineTo(worldWidth, pixelsPerGridHeight * i);
         }
 	}
