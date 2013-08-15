@@ -1,13 +1,13 @@
 (function (window) {
 
-	function Bullet(x, y, vx, vy) {
-		this.initialize(x, y, vx, vy);
+	function Bullet(wx, wy, vx, vy) {
+		this.initialize(wx, wy, vx, vy);
 	}
 
-	var p = Bullet.prototype = new createjs.Container();
+	var p = Bullet.prototype = new WorldObject();
 
-	p.Container_initialize = p.initialize;
-	p.bulletShape;
+	p.WorldObject_initialize = p.initialize;
+	p.shape;
 
 	p.vX;
 	p.vY;
@@ -15,54 +15,49 @@
 	p.decay;
 	p.radius;
 
-	p.initialize = function(x, y, vx, vy) {
-		this.Container_initialize();
+	p.initialize = function(wx, wy, vx, vy) {
+		this.WorldObject_initialize(wx, wy);
 
 		this.active = true;
-		this.reset(x, y, vx, vy);
+		this.reset(wx, wy, vx, vy);
 		this.decay = 1;
 		this.radius = 4;
 
 
-		this.bulletShape = new createjs.Shape();
-		this.addChild(this.bulletShape);
+		this.shape = new createjs.Shape();
+		this.addChild(this.shape);
 
 		this.makeShape();
 
-		var angle = Math.atan2(vy, vx);
-		this.rotation = toDegrees(angle);
+		this.shape.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
-	p.reset = function(x, y, vx, vy) {
-		this.x = x;
-		this.y = y;
+	p.reset = function(wx, wy, vx, vy) {
 		this.vX = vx;
 		this.vY = vy;
 	}
 
 	p.makeShape = function () {
-		var g = this.bulletShape.graphics;
+		var g = this.shape.graphics;
 		g.clear();
 		g.beginFill("yellow").drawCircle(0, 0, this.radius);
 	}
 
 	p.tick = function(event) {
-		this.x += (event.delta / 1000) * this.vX * 800;
-		this.y += (event.delta / 1000) * this.vY * 800;
+		this.wx += (event.delta / 1000) * this.vX * 800;
+		this.wy += (event.delta / 1000) * this.vY * 800;
+
+		this.updateCanvasPosition();
 		this.reflect();
 	}
 
-	p.inBounds = function() {
-        return this.x > 0 && this.y > 0 && this.x <= window.canvasWidth && this.y <= window.canvasHeight;
-    }
-
     p.reflect = function() {
-    	if (this.x < 0 || this.x > window.canvasWidth) {
+    	if (this.wx < 0 || this.wx > window.worldWidth) {
     		this.vX *= -1;
     		this.decay -= 1;
     		return true;
     	}
-    	if (this.y < 0 || this.y > window.canvasHeight) {
+    	if (this.wy < 0 || this.wy > window.worldHeight) {
     		this.vY *= -1;
     		this.decay -= 1;
     		return true;

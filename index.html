@@ -6,6 +6,8 @@
     <script type="text/javascript" src="resources/createjs-2013.05.14.min.js"></script>
 
     <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="worldobject.js"></script>
+    <script type="text/javascript" src="grid.js"></script>
     <script type="text/javascript" src="jet.js"></script>
     <script type="text/javascript" src="bullet.js"></script>
     <script type="text/javascript" src="enemy.js"></script>
@@ -16,8 +18,11 @@
     <script>
     // display
     var FPS = 60;
-    var gridColumns = 9;
-    var gridRows = 5;
+    var gridColumns = 16;
+    var gridRows = 10;
+    var worldWidth;
+    var worldHeight;
+
     var canvasWidth;
     var canvasHeight;
 
@@ -28,8 +33,10 @@
     var jet;
     var bullets = [];
     var enemies = [];
+    var grid;
+
     var lastSpawnTime;
-    var timeBetweenSpawns = 1 * 1000;
+    var timeBetweenSpawns = 0.5 * 1000;
 
     var clockText;
     var startTime;
@@ -44,8 +51,11 @@
         createjs.Ticker.addEventListener("tick", tick);
 
         stage = new createjs.Stage("canvas");
-        canvasWidth = window.stage.canvas.width;
+        worldWidth = 100 * gridColumns;
+        worldHeight = 100 * gridRows;
+
         canvasHeight = window.stage.canvas.height;
+        canvasWidth = window.stage.canvas.width;
 
         restart();
     }
@@ -53,15 +63,14 @@
     function restart() {
         stage.removeAllChildren();
 
-        drawGrid();
-
         leftStickX = 0;
         leftStickY = 0;
         rightStickX = 0;
         rihtStickY = 0;
         lastSpawnTime = 0;
 
-        clockText = new createjs.Text("0", "20px Arial", "#ff7700");
+        clockText = new createjs.Text("0", "40px Arial", "#ff7700");
+        clockText.textAlign = "center";
         clockText.x = canvasWidth / 2;
         clockText.y = 10;
 
@@ -70,8 +79,11 @@
 
         startTime = createjs.Ticker.getTime();
 
-        jet = new Jet(canvasWidth / 2, canvasHeight / 2);
+        jet = new Jet(worldWidth / 2, worldHeight / 2);
         stage.addChild(jet);
+
+        grid = new Grid();
+        stage.addChild(grid);
     }
 
     function tick(event) {
@@ -81,6 +93,7 @@
         if (!paused) {
             // update game objects
             jet.tick(event);
+            grid.tick(event);
             updateBullets(event);
             updateEnemies(event);
             updateClock(event);
@@ -118,7 +131,7 @@
     }
 
     function spawnEnemy(event) {
-        var randomLocations = [[10, 10], [canvasWidth - 10, canvasHeight - 10], [10, canvasHeight - 10], [canvasWidth - 10, 10]];
+        var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
         var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
         var randomEnemyType = Math.floor(Math.random() * 2);
         var enemy;
@@ -137,52 +150,13 @@
         clockText.text = deltaS;
     }
 
-    function drawGrid() {
-        var grid = new createjs.Shape();
-        var g = grid.graphics;
-        var gh = grid.graphics;
-
-        var pixelsPerGridWidth = canvasWidth / gridColumns;
-        var pixelsPerGridHeight = canvasHeight / gridRows;
-
-        // set grid style
-        g.setStrokeStyle(.5, "round");
-        g.beginStroke("#000000");
-
-        // set grid lines
-        g.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
-        g.lineTo(canvasWidth, 0);
-
-        gh.moveTo(0,0).lineTo(canvasWidth, canvasHeight);
-        gh.lineTo(0, canvasHeight);
-
-
-        for(var i = 0; i < gridColumns; i++) {
-            g.moveTo(pixelsPerGridWidth * i, 0).lineTo(pixelsPerGridWidth * i, canvasHeight);
-        }
-
-        for(var i = 0; i < gridRows; i++) {
-            gh.moveTo(0, pixelsPerGridHeight * i).lineTo(canvasWidth, pixelsPerGridHeight * i);
-        }
-
-        //outline grid
-
-        g.setStrokeStyle(12);
-        g.beginFill();
-        g.drawRect(0,0,canvasWidth,canvasHeight);
-
-        // draw grid
-        g.endStroke();
-        stage.addChild(grid);
-    }
-
     function pauseGame() {
         paused = !paused;
     }
     </script>
 </head>
 <body onLoad="init();">
-    <canvas id="canvas" width="900" height="500"></canvas>
+    <canvas id="canvas" width="1280" height="720"></canvas>
     <div id="debug"></div>
 </body>
 </html>
