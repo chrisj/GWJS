@@ -134,12 +134,12 @@
     function spawnEnemy(event) {
         var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
         var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
-        var randomEnemyType = Math.floor(Math.random() * 3);
+        var randomEnemyType = Math.floor(Math.random() * 1);
         var enemy;
         switch(randomEnemyType) {
-            case 0: enemy = new Triangle(location[0], location[1]); break;
+            case 2: enemy = new Triangle(location[0], location[1]); break;
             case 1: enemy = new Square(location[0], location[1]); break;
-            case 2: enemy = new Star(location[0], location[1]); break;
+            case 0: enemy = new Star(location[0], location[1]); break;
         }
 
         stage.addChild(enemy);
