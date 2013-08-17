@@ -1,25 +1,21 @@
 // Utilities
 
-function square(x) {
-	return x * x;
-}
-
 function distanceBetweenPoints(x1, y1, x2, y2) {
-	var deltax = x1 - x2;
-	var deltay = y1 - y2;
+	var dx = x1 - x2;
+	var dy = y1 - y2;
 
-	return Math.sqrt(square(deltax) + square(deltay));
+	return Math.sqrt(dx*dx + dy*dy);
 }
 
-// function distanceBetweenPoints(x1, y1, x2, y2) {
-//   var deltax = x1 - x2;
-//   var deltay = y1 - y2;
+function distanceBetweenPointsSquared(x1, y1, x2, y2) {
+  var dx = x1 - x2;
+  var dy = y1 - y2;
 
-//   return deltax * deltax + deltay * deltay;
-// }
+  return dx*dx + dy*dy;
+}
 
 function distanceToOrigin(x, y) {
-	return distanceBetweenPoints(x, y, 0, 0);
+	return Math.sqrt(x*x+y*y);
 }
 
 Array.prototype.myfilter = function(condition) {

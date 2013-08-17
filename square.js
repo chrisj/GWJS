@@ -18,7 +18,7 @@
 		var g = this.shape.graphics;
 		g.clear();
 
-		var size = Math.sqrt(square(this.radius) / 2) * 2;
+		var size = Math.sqrt(this.radius * this.radius / 2) * 2;
 		g.setStrokeStyle(2, "round").beginStroke("cyan").drawRect(-size/2, -size/2, size, size);
 	}
 

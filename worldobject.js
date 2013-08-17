@@ -44,17 +44,5 @@
         return this.wy - this.radius > 0 && this.wy + this.radius <= window.worldHeight;
     }
 
-    p.inCanvasBounds = function() {
-        return this.inCanvasBoundsX() && this.inCanvasBoundsY();
-    }
-
-    p.inCanvasBoundsX = function() {
-        return this.x - this.radius > 0 && this.wx + this.radius <= window.worldWidth;
-    }
-
-	p.inCanvasBoundsY = function() {
-        return this.y - this.radius > 0 && this.wy + this.radius <= window.worldHeight;
-    }
-
 	window.WorldObject = WorldObject;
 }(window))
