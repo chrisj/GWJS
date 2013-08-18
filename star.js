@@ -6,22 +6,16 @@
 
 	var p = Star.prototype = new Enemy();
 
-	var lastFluxTime;
-	var flux;
-
 	p.Enemy_initialize = p.initialize;
 
 	p.initialize = function(x, y) {
 		this.Enemy_initialize(x, y, 15, 200);
 		this.rotatesToTarget = false;
 		this.makeAnimations();
-
-		this.lastFluxTime = 0;
-		this.flux = toRadians(45);
 	}
 
 	p.makeShape = function () {
-		var g = this.graphics;
+		var g = this.shape.graphics;
 		g.clear();
 		g.setStrokeStyle(2, "round").beginStroke("yellow").drawPolyStar(0, 0, this.radius, 5, .63, 0);
 	}
@@ -42,17 +36,18 @@
 
 			var angle = Math.atan2(deltay, deltax);
 
-			var occTime = 2 * 1000;
-
+			var occTime = .5 * 1000;
+			var lastFluxTime;
+			var flux = 5;
 			var random = Math.floor(Math.random() * 3);
-
-        	if (event.runTime - this.lastFluxTime > occTime) {
-            	this.flux *= -1;
-            	this.lastFluxTime = event.runTime;
+        
+        	if (event.runTime - lastFluxTime > occTime) {
+            	flux *= -1;
+            	lastSpawnTime = event.runTime;
         	}
 
-			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + this.flux);
-			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + this.flux);
+			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + flux);
+			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + flux);
 
 
 			this.checkCollision();
