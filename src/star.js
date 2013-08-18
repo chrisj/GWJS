@@ -1,6 +1,9 @@
 (function (window) {
 	"use strict";
 
+	var occTime = 0.05 * 1000;
+	var lastFluxTime;
+
 	function Star(x, y) {
 		this.initialize(x, y);
 	}
@@ -9,14 +12,21 @@
 
 	p.Enemy_initialize = p.initialize;
 
+	p.lastFluxTime;
+	p.occTime;
+	p.flux;
+
 	p.initialize = function(x, y) {
 		this.Enemy_initialize(x, y, 15, 200);
 		this.rotatesToTarget = false;
 		this.makeAnimations();
+		this.lastFluxTime = 0;
+		this.occTime = .9 * 1000;
+		this.flux = toRadians(30);
 	}
 
 	p.makeShape = function () {
-		var g = this.shape.graphics;
+		var g = this.graphics;
 		g.clear();
 		g.setStrokeStyle(2, "round").beginStroke("yellow").drawPolyStar(0, 0, this.radius, 5, .63, 0);
 	}
@@ -28,33 +38,27 @@
 	// adds a zig zag pattern to movement
 
 	p.tick = function(event) {
-		if (this.active) {
+		var target = window.jet;
 
-			var target = window.jet;
+		var deltax = target.wx - this.wx;
+		var deltay = target.wy - this.wy;
 
-			var deltax = target.wx - this.wx;
-			var deltay = target.wy - this.wy;
+		var angle = Math.atan2(deltay, deltax);
 
-			var angle = Math.atan2(deltay, deltax);
-
-			var occTime = .5 * 1000;
-			var lastFluxTime;
-			var flux = 5;
-			var random = Math.floor(Math.random() * 3);
-
-        	if (event.runTime - lastFluxTime > occTime) {
-            	flux *= -1;
-            	lastSpawnTime = event.runTime;
-        	}
-
-			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + flux);
-			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + flux);
-
-
-			this.checkCollision();
-
-			this.updateCanvasPosition();
+		if (event.runTime - this.lastFluxTime > this.occTime) {
+	    	this.flux *= -1;
+	    	this.lastFluxTime = event.runTime;
 		}
+
+		this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + this.flux);
+		this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + this.flux);
+
+
+		this.checkCollision();
+
+		this.updateCanvasPosition();
+
+		return this.alive;
 	}
 
 	window.Star = Star;
