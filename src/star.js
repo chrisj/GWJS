@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Star(x, y) {
 		this.initialize(x, y);
@@ -40,7 +41,7 @@
 			var lastFluxTime;
 			var flux = 5;
 			var random = Math.floor(Math.random() * 3);
-        
+
         	if (event.runTime - lastFluxTime > occTime) {
             	flux *= -1;
             	lastSpawnTime = event.runTime;

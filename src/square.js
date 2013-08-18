@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Square(x, y) {
 		this.initialize(x, y);
@@ -15,7 +16,7 @@
 	}
 
 	p.makeShape = function () {
-		var g = this.shape.graphics;
+		var g = this.graphics;
 		g.clear();
 
 		var size = Math.sqrt(this.radius * this.radius / 2) * 2;

@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Enemy(wx, wy, radius, velocity) {
 		this.initialize(wx, wy, radius, velocity);
@@ -8,50 +9,45 @@
 
 	p.WorldObject_initialize = p.initialize;
 
-	p.shape;
-	p.active;
-	p.radius;
 	p.velocity;
 	p.rotatesToTarget;
+	p.alive;
 
 	p.initialize = function(wx, wy, radius, velocity) {
-		this.WorldObject_initialize(wx, wy);
+		this.WorldObject_initialize(wx, wy, radius);
 
-		this.radius = radius;this.x
 		this.velocity = velocity;
-		this.active = true;
 		this.rotatesToTarget = true;
+		this.alive = true;
 
-		this.shape = new createjs.Shape();
-		this.addChild(this.shape);
 		this.makeShape();
-		this.shape.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
+		this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
 	}
 
 	p.makeShape = function () {}
 
 	p.tick = function(event) {
-		if (this.active) {
 
-			// move the triangle toward the jet
-			var target = window.jet;
+		// move the triangle toward the jet
+		var target = window.jet;
 
-			var deltax = target.wx - this.wx;
-			var deltay = target.wy - this.wy;
+		var deltax = target.wx - this.wx;
+		var deltay = target.wy - this.wy;
 
-			var angle = Math.atan2(deltay, deltax);
+		var angle = Math.atan2(deltay, deltax);
 
-			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
-			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
+		this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
+		this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
 
-			if (this.rotatesToTarget) {
-				this.rotation = toDegrees(angle);
-			}
-
-			this.checkCollision();
-
-			this.updateCanvasPosition();
+		if (this.rotatesToTarget) {
+			this.rotation = toDegrees(angle);
 		}
+
+		this.checkCollision();
+
+		this.updateCanvasPosition();
+
+		return this.alive;
 	}
 
 	p.checkCollision = function(event) {
@@ -78,8 +74,7 @@
 	}
 
 	p.destroy = function() {
-		this.active = false;
-		window.stage.removeChild(this);
+		this.alive = false;
 	}
 
 	window.Enemy = Enemy;

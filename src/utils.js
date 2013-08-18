@@ -1,3 +1,5 @@
+"use strict";
+
 // Utilities
 
 function distanceBetweenPoints(x1, y1, x2, y2) {
@@ -18,7 +20,7 @@ function distanceToOrigin(x, y) {
 	return Math.sqrt(x*x+y*y);
 }
 
-Array.prototype.myfilter = function(condition) {
+Array.prototype.removeIf = function(condition) {
   for (var i = 0; i < this.length; i++) {
     if (condition(this[i])) {
       this.splice(i, 1);
