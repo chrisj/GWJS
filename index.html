@@ -137,9 +137,9 @@
         var randomEnemyType = getRandomInt(0, 2);
         var enemy;
         switch(randomEnemyType) {
-            case 0: enemy = new Triangle(location[0], location[1]); break;
+            case 2: enemy = new Triangle(location[0], location[1]); break;
             case 1: enemy = new Square(location[0], location[1]); break;
-            case 2: enemy = new Star(location[0], location[1]); break;
+            case 0: enemy = new Star(location[0], location[1]); break;
         }
 
         stage.addChild(enemy);

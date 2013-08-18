@@ -26,5 +26,35 @@
 
 	// adds a zig zag pattern to movement
 
+	p.tick = function(event) {
+		if (this.active) {
+
+			var target = window.jet;
+
+			var deltax = target.wx - this.wx;
+			var deltay = target.wy - this.wy;
+
+			var angle = Math.atan2(deltay, deltax);
+
+			var occTime = .5 * 1000;
+			var lastFluxTime;
+			var flux = 5;
+			var random = Math.floor(Math.random() * 3);
+        
+        	if (event.runTime - lastFluxTime > occTime) {
+            	flux *= -1;
+            	lastSpawnTime = event.runTime;
+        	}
+
+			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + flux);
+			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + flux);
+
+
+			this.checkCollision();
+
+			this.updateCanvasPosition();
+		}
+	}
+
 	window.Star = Star;
 }(window))
