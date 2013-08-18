@@ -11,11 +11,11 @@
 	p.initialize = function() {
 		this.WorldObject_initialize(0, 0);
         this.makeShape();
-        this.shape.cache(-5,-5,worldWidth+5, worldHeight+5);
+        this.cache(-5,-5,worldWidth+5, worldHeight+5);
 	}
 
 	p.makeShape = function () {
-		var g = this.shape.graphics;
+		var g = this.graphics;
 		g.clear();
 		g.beginStroke("#ffffff");
 		g.setStrokeStyle(2);

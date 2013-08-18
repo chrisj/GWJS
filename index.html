@@ -16,7 +16,11 @@
     <script type="text/javascript" src="star.js"></script>
     <script type="text/javascript" src="input.js"></script>
 
+    <script type="text/javascript" src="particle.js"></script>
+
     <script>
+    "use strict";
+
     // display
     var FPS = 60;
     var gridColumns = 16;
@@ -67,7 +71,7 @@
         leftStickX = 0;
         leftStickY = 0;
         rightStickX = 0;
-        rihtStickY = 0;
+        rightStickY = 0;
         lastSpawnTime = 0;
 
         clockText = new createjs.Text("0", "40px Arial", "#ff7700");
@@ -96,7 +100,7 @@
             jet.tick(event);
             grid.tick(event);
             updateBullets(event);
-            updateEnemies(event);
+            // updateEnemies(event);
             updateClock(event);
 
             // draw
@@ -134,12 +138,13 @@
     function spawnEnemy(event) {
         var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
         var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
-        var randomEnemyType = getRandomInt(0, 2);
+        var randomEnemyType = getRandomInt(1, 2);
+
         var enemy;
         switch(randomEnemyType) {
-            case 0: enemy = new Triangle(location[0], location[1]); break;
+            case 2: enemy = new Triangle(location[0], location[1]); break;
             case 1: enemy = new Square(location[0], location[1]); break;
-            case 2: enemy = new Star(location[0], location[1]); break;
+            case 0: enemy = new Star(location[0], location[1]); break;
         }
 
         stage.addChild(enemy);

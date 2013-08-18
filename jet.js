@@ -9,8 +9,14 @@
 	p.WorldObject_initialize = p.initialize;
 	p.jetBody;
 	p.lastShotTime;
+
+
+    p.lastParticleTime;
+
 	p.radius;
     p.radiusSqr;
+
+    p.emitter;
 
 	p.initialize = function(wx, wy) {
 		this.WorldObject_initialize(wx, wy);
@@ -19,15 +25,18 @@
         this.y = window.canvasHeight / 2;
 
 		this.lastShotTime = 0;
+        this.lastParticleTime = 0;
 		this.radius = 20;
         this.radiusSqr = this.radius * this.radius;
 
+        this.emitter = new Emitter();
+
 		this.makeShape();
-        this.shape.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
+        this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
 	}
 
 	p.makeShape = function () {
-		var g = this.shape.graphics;
+		var g = this.graphics;
 		g.clear();
         // g.setStrokeStyle(2, "round").beginStroke("red").drawCircle(0, 0, this.radius);
 
@@ -60,6 +69,14 @@
 
             this.wx += vX;
             this.wy += vY;
+
+            if (event.runTime - this.lastParticleTime > 10) {
+                var pVX = -vX + (Math.random() * 2 - 1);
+                var pVY = -vY + (Math.random() * 2 - 1);
+
+                this.emitter.addParticle(this.wx, this.wy, pVX, pVY, 1 * 1000);
+                this.lastParticleTime = event.runTime;
+            }
 
             if (!this.inWorldBoundsX()) {
                 if (this.wx > this.radius) {
@@ -99,6 +116,8 @@
             this.shoot();
             this.lastShotTime = event.runTime;
         }
+
+        this.emitter.tick(event);
     }
 
     p.shoot = function () {

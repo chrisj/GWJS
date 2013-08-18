@@ -13,7 +13,7 @@
 	}
 
 	p.makeShape = function () {
-		var g = this.shape.graphics;
+		var g = this.graphics;
 		g.clear();
 		g.setStrokeStyle(2, "round").beginStroke("blue").drawPolyStar(0, 0, this.radius, 3, 0, 0);
 	}

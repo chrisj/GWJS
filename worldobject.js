@@ -1,29 +1,23 @@
 (function (window) {
 
-	function WorldObject(wx, wy, radius, velocity) {
-		this.initialize(wx, wy, radius, velocity);
+	function WorldObject(wx, wy, radius) {
+		this.initialize(wx, wy, radius);
 	}
 
-	var p = WorldObject.prototype = new createjs.Container();
+	var p = WorldObject.prototype = new createjs.Shape();
 
-	p.Container_initialize = p.initialize;
-
-	p.shape;
-	p.active;
-	p.radius;
+	p.Shape_initialize = p.initialize;
 
 	p.wx;
 	p.wy;
+	p.radius;
 
-	p.initialize = function(wx, wy, radius, velocity) {
-		this.Container_initialize();
+	p.initialize = function(wx, wy, radius) {
+		this.Shape_initialize();
 
 		this.wx = wx;
 		this.wy = wy;
 		this.radius = radius;
-
-		this.shape = new createjs.Shape();
-		this.addChild(this.shape);
 	}
 
 	p.updateCanvasPosition = function() {
