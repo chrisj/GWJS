@@ -71,6 +71,9 @@
     function restart() {
         stage.removeAllChildren();
 
+        enemies.length = 0;
+        bullets.length = 0;
+
         leftStickX = 0;
         leftStickY = 0;
         rightStickX = 0;
@@ -158,7 +161,7 @@
     function spawnEnemy(event) {
         var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
         var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
-        var randomEnemyType = getRandomInt(1, 2);
+        var randomEnemyType = getRandomInt(0, 2);
 
         var enemy;
         switch(randomEnemyType) {
