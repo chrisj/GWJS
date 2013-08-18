@@ -69,11 +69,11 @@
             this.wx += vX;
             this.wy += vY;
 
-            if (event.runTime - this.lastParticleTime > 10) {
+            if (event.runTime - this.lastParticleTime > 20) {
                 var pVX = -vX + (Math.random() * 2 - 1);
                 var pVY = -vY + (Math.random() * 2 - 1);
 
-                window.emitter.addParticle(this.wx, this.wy, pVX, pVY, 1 * 1000, "orange");
+                window.emitter.addParticle(this.wx, this.wy, pVX, pVY, 0.75 * 1000, "orange");
                 this.lastParticleTime = event.runTime;
             }
 
