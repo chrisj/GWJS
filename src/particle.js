@@ -12,24 +12,32 @@
 	p.vx;
 	p.vy;
 	p.life;
+	p.color
 
-	p.initialize = function(wx, wy, vx, vy, life) {
+	p.initialize = function(wx, wy, vx, vy, life, color) {
 		this.WorldObject_initialize(wx, wy, 3);
 
 		this.vx = vx || 0;
 		this.vy = vy || 0;
 		this.life = life || 0;
+		this.color = color;
 
 		this.makeShape();
 		this.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
 	}
 
-	p.reset = function(wx, wy, vx, vy, life) {
+	p.reset = function(wx, wy, vx, vy, life, color) {
 		this.wx = wx;
 		this.wy = wy;
 		this.vx = vx;
 		this.vy = vy;
 		this.life = life;
+
+		if (color !== this.color) {
+			this.color = color;
+			this.makeShape();
+			this.cache(-this.radius, -this.radius, 2*this.radius, 2*this.radius);
+		}
 
 		this.alpha = 1;
 		createjs.Tween.get(this,{loop:false}).to({alpha:0}, life);
@@ -38,7 +46,7 @@
 	p.makeShape = function() {
 		var g = this.graphics;
 		g.clear();
-		g.beginFill("red").drawCircle(0, 0, this.radius);
+		g.beginFill(this.color).drawCircle(0, 0, this.radius);
 	}
 
 	// p.makeAnimations = function () {
@@ -94,12 +102,12 @@
 		}
 	}
 
-	ep.addParticle = function(wx, wy, vx, vy, life) {
-		if (this.particleCount == this.totalParticles) {
+	ep.addParticle = function(wx, wy, vx, vy, life, color) {
+		if (this.particleCount === this.totalParticles) {
 			return false;
 		} else {
 			var particle = this.particlePool[this.particleCount];
-			particle.reset(wx, wy, vx, vy, life);
+			particle.reset(wx, wy, vx, vy, life, color);
 
 			window.stage.addChild(particle);
 

@@ -39,6 +39,8 @@
     var enemies = [];
     var grid;
 
+    var emitter;
+
     var lastSpawnTime;
     var timeBetweenSpawns = 0.5 * 1000;
 
@@ -60,6 +62,8 @@
 
         canvasHeight = window.stage.canvas.height;
         canvasWidth = window.stage.canvas.width;
+
+        emitter = new Emitter();
 
         restart();
     }
@@ -99,8 +103,9 @@
             jet.tick(event);
             grid.tick(event);
             updateBullets(event);
-            updateEnemies(event);
+            // updateEnemies(event);
             updateClock(event);
+            emitter.tick(event);
 
             // draw
             stage.update();
@@ -114,6 +119,17 @@
 
             if (bullet.decay <= 0) {
                 stage.removeChild(bullet);
+
+                var bVX = (event.delta / 1000) * bullet.vX;
+                var bVY = (event.delta / 1000) * bullet.vY;
+
+                for(var i = 0; i < 3; i++) {
+                    var pVX = bVX + (Math.random() * 10 - 5);
+                    var pVY = bVY + (Math.random() * 10 - 5);
+
+                    emitter.addParticle(bullet.wx, bullet.wy, pVX/4, pVY/4, 0.5 * 1000, "yellow");
+                }
+
                 return true;
             }
 

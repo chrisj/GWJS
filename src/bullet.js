@@ -12,12 +12,15 @@
 	p.vX;
 	p.vY;
 	p.decay;
+	p.speed;
 
 	p.initialize = function(wx, wy, vx, vy) {
 		this.WorldObject_initialize(wx, wy, 4);
 
-		this.vX = vx;
-		this.vY = vy;
+		this.speed = 800;
+
+		this.vX = vx * this.speed;
+		this.vY = vy * this.speed;
 		this.decay = 1;
 
 		this.makeShape();
@@ -27,8 +30,8 @@
 	p.reset = function(wx, wy, vx, vy) {
 		this.wx = wx;
 		this.wy = wy;
-		this.vX = vx;
-		this.vY = vy;
+		this.vX = vx * this.speed;
+		this.vY = vy * this.speed;
 	}
 
 	p.makeShape = function () {
@@ -38,8 +41,8 @@
 	}
 
 	p.tick = function(event) {
-		this.wx += (event.delta / 1000) * this.vX * 800;
-		this.wy += (event.delta / 1000) * this.vY * 800;
+		this.wx += (event.delta / 1000) * this.vX;
+		this.wy += (event.delta / 1000) * this.vY;
 
 		this.updateCanvasPosition();
 		this.reflect();
@@ -49,11 +52,26 @@
 
     p.reflect = function() {
     	if (!this.inWorldBoundsX()) {
+
+    		if (this.wx < this.radius) {
+    			this.wx = 0;
+    		} else {
+    			this.wx = worldWidth;
+    		}
+
     		this.vX *= -1;
     		this.decay -= 1;
     		return true;
     	}
     	if (!this.inWorldBoundsY()) {
+
+  			if (this.wy < this.radius) {
+    			this.wy = 0;
+    		} else {
+    			this.wy = worldHeight;
+    		}
+
+
     		this.vY *= -1;
     		this.decay -= 1;
     		return true;

@@ -30,8 +30,6 @@
 		this.radius = 20;
         this.radiusSqr = this.radius * this.radius;
 
-        this.emitter = new Emitter();
-
 		this.makeShape();
         this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
 	}
@@ -75,7 +73,7 @@
                 var pVX = -vX + (Math.random() * 2 - 1);
                 var pVY = -vY + (Math.random() * 2 - 1);
 
-                this.emitter.addParticle(this.wx, this.wy, pVX, pVY, 1 * 1000);
+                window.emitter.addParticle(this.wx, this.wy, pVX, pVY, 1 * 1000, "orange");
                 this.lastParticleTime = event.runTime;
             }
 
@@ -117,8 +115,6 @@
             this.shoot();
             this.lastShotTime = event.runTime;
         }
-
-        this.emitter.tick(event);
     }
 
     p.shoot = function () {
