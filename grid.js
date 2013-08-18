@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Grid() {
 		this.initialize();

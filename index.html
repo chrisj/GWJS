@@ -100,7 +100,7 @@
             jet.tick(event);
             grid.tick(event);
             updateBullets(event);
-            // updateEnemies(event);
+            updateEnemies(event);
             updateClock(event);
 
             // draw
@@ -110,7 +110,7 @@
 
     function updateBullets(event) {
         // move and remove bullets
-        bullets.myfilter(function(bullet) {
+        bullets.removeIf(function(bullet) {
             bullet.tick(event);
 
             if (bullet.decay <= 0) {
@@ -130,9 +130,14 @@
         }
 
         // move enemies
-        for(var i = 0; i < enemies.length; i++){
-            enemies[i].tick(event);
-        }
+        enemies.removeIf(function(enemy) {
+            if (!enemy.tick(event)) {
+                stage.removeChild(enemy);
+                return true;
+            }
+
+            return false;
+        });
     }
 
     function spawnEnemy(event) {

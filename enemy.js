@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Enemy(wx, wy, radius, velocity) {
 		this.initialize(wx, wy, radius, velocity);
@@ -10,12 +11,14 @@
 
 	p.velocity;
 	p.rotatesToTarget;
+	p.alive;
 
 	p.initialize = function(wx, wy, radius, velocity) {
 		this.WorldObject_initialize(wx, wy, radius);
 
 		this.velocity = velocity;
 		this.rotatesToTarget = true;
+		this.alive = true;
 
 		this.makeShape();
 		this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
@@ -43,6 +46,8 @@
 		this.checkCollision();
 
 		this.updateCanvasPosition();
+
+		return this.alive;
 	}
 
 	p.checkCollision = function(event) {
@@ -69,7 +74,7 @@
 	}
 
 	p.destroy = function() {
-		window.stage.removeChild(this);
+		this.alive = false;
 	}
 
 	window.Enemy = Enemy;

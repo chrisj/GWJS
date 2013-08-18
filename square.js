@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Square(x, y) {
 		this.initialize(x, y);

@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function WorldObject(wx, wy, radius) {
 		this.initialize(wx, wy, radius);

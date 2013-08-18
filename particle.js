@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Particle(wx, wy, vx, vy, life) {
 		this.initialize(wx, wy, vx, vy);

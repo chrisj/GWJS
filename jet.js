@@ -1,4 +1,5 @@
 (function (window) {
+    "use strict";
 
 	function Jet(wx, wy) {
 		this.initialize(wx, wy);

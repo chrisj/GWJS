@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Triangle(x, y) {
 		this.initialize(x, y);

@@ -1,3 +1,5 @@
+"use strict";
+
 var KEYCODE_ENTER = 13;
 var KEYCODE_SPACE = 32;
 var KEYCODE_UP = 38;

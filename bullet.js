@@ -1,4 +1,5 @@
 (function (window) {
+	"use strict";
 
 	function Bullet(wx, wy, vx, vy) {
 		this.initialize(wx, wy, vx, vy);
@@ -42,6 +43,8 @@
 
 		this.updateCanvasPosition();
 		this.reflect();
+
+		return this.decay > 0;
 	}
 
     p.reflect = function() {
