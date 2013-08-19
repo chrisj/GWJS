@@ -1,8 +1,8 @@
 (function (window) {
 	"use strict";
 
-	function Enemy(wx, wy, radius, velocity) {
-		this.initialize(wx, wy, radius, velocity);
+	function Enemy(wx, wy, radius, velocity, color) {
+		this.initialize(wx, wy, radius, velocity, color);
 	}
 
 	var p = Enemy.prototype = new WorldObject();
@@ -12,13 +12,15 @@
 	p.velocity;
 	p.rotatesToTarget;
 	p.alive;
+	p.color
 
-	p.initialize = function(wx, wy, radius, velocity) {
+	p.initialize = function(wx, wy, radius, velocity, color) {
 		this.WorldObject_initialize(wx, wy, radius);
 
 		this.velocity = velocity;
 		this.rotatesToTarget = true;
 		this.alive = true;
+		this.color = color;
 
 		this.makeShape();
 		this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
@@ -60,21 +62,18 @@
 			target.destroy();
 		}
 
-		// check bullets
-		for (var i = 0; i < window.bullets.length; i++) {
-			var enemy = window.bullets[i];
-
-			var distance = distanceBetweenPoints(this.wx, this.wy, enemy.wx, enemy.wy);
-
-			if (distance < this.radius + enemy.radius  - 2) {
-				this.destroy();
-				break;
-			}
-		}
+		window.bulletEmitter.checkCollisionWithEnemy(this);
 	}
 
 	p.destroy = function() {
 		this.alive = false;
+
+		for(var i = 0; i < 5; i++) {
+            var pVX = (Math.random() * 16 - 8);
+            var pVY = (Math.random() * 16 - 8);
+
+            window.particleEmitter.addParticle(this.wx, this.wy, pVX, pVY, 0.7 * 1000, this.color);
+        }
 	}
 
 	window.Enemy = Enemy;

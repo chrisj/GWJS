@@ -10,7 +10,7 @@
 	p.Enemy_initialize = p.initialize;
 
 	p.initialize = function(x, y) {
-		this.Enemy_initialize(x, y, 20, 150);
+		this.Enemy_initialize(x, y, 20, 150, "cyan");
 		this.rotatesToTarget = false;
 		this.makeAnimations();
 	}
@@ -20,7 +20,7 @@
 		g.clear();
 
 		var size = Math.sqrt(this.radius * this.radius / 2) * 2;
-		g.setStrokeStyle(2, "round").beginStroke("cyan").drawRect(-size/2, -size/2, size, size);
+		g.setStrokeStyle(2, "round").beginStroke(this.color).drawRect(-size/2, -size/2, size, size);
 	}
 
 	p.makeAnimations = function () {

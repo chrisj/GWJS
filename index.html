@@ -35,11 +35,11 @@
 
     // game elements
     var jet;
-    var bullets = [];
     var enemies = [];
     var grid;
 
-    var emitter;
+    var particleEmitter;
+    var bulletEmitter;
 
     var lastSpawnTime;
     var timeBetweenSpawns = 0.5 * 1000;
@@ -52,10 +52,6 @@
         document.onkeydown = handleKeyDown;
         document.onkeyup = handleKeyUp;
 
-        createjs.Ticker.useRAF = true; // learn more about this
-        createjs.Ticker.setFPS(FPS);
-        createjs.Ticker.addEventListener("tick", tick);
-
         stage = new createjs.Stage("canvas");
         worldWidth = 100 * gridColumns;
         worldHeight = 100 * gridRows;
@@ -63,16 +59,23 @@
         canvasHeight = window.stage.canvas.height;
         canvasWidth = window.stage.canvas.width;
 
-        emitter = new Emitter();
+        particleEmitter = new ParticleEmitter();
+        bulletEmitter = new BulletEmitter();
 
         restart();
+
+        createjs.Ticker.useRAF = true;
+        createjs.Ticker.setFPS(FPS);
+        createjs.Ticker.addEventListener("tick", tick);
     }
 
     function restart() {
+        paused = true;
+
         stage.removeAllChildren();
 
         enemies.length = 0;
-        bullets.length = 0;
+        bulletEmitter.particleCount = 0;
 
         leftStickX = 0;
         leftStickY = 0;
@@ -95,6 +98,8 @@
 
         grid = new Grid();
         stage.addChild(grid);
+
+        paused = false;
     }
 
     function tick(event) {
@@ -105,39 +110,15 @@
             // update game objects
             jet.tick(event);
             grid.tick(event);
-            updateBullets(event);
+            bulletEmitter.tick(event);
+
             updateEnemies(event);
             updateClock(event);
-            emitter.tick(event);
+            particleEmitter.tick(event);
 
             // draw
             stage.update();
         }
-    }
-
-    function updateBullets(event) {
-        // move and remove bullets
-        bullets.removeIf(function(bullet) {
-            bullet.tick(event);
-
-            if (bullet.decay <= 0) {
-                stage.removeChild(bullet);
-
-                var bVX = (event.delta / 1000) * bullet.vX;
-                var bVY = (event.delta / 1000) * bullet.vY;
-
-                for(var i = 0; i < 3; i++) {
-                    var pVX = bVX + (Math.random() * 10 - 5);
-                    var pVY = bVY + (Math.random() * 10 - 5);
-
-                    emitter.addParticle(bullet.wx, bullet.wy, pVX/4, pVY/4, 0.5 * 1000, "yellow");
-                }
-
-                return true;
-            }
-
-            return false;
-        });
     }
 
     function updateEnemies(event) {

@@ -73,7 +73,7 @@
                 var pVX = -vX + (Math.random() * 2 - 1);
                 var pVY = -vY + (Math.random() * 2 - 1);
 
-                window.emitter.addParticle(this.wx, this.wy, pVX, pVY, 0.75 * 1000, "orange");
+                window.particleEmitter.addParticle(this.wx, this.wy, pVX, pVY, 0.75 * 1000, "orange");
                 this.lastParticleTime = event.runTime;
             }
 
@@ -132,9 +132,11 @@
         // var dX = x * cos - y * sin;
         // var dY = x * sin + y * cos;
 
-        var newBullet = new Bullet(jet.wx, jet.wy, x, y);
-        window.bullets.push(newBullet);
-        window.stage.addChild(newBullet);
+        // var newBullet = new Bullet(jet.wx, jet.wy, x, y);
+        // window.bullets.push(newBullet);
+        // window.stage.addChild(newBullet);
+
+        window.bulletEmitter.addBullet(jet.wx, jet.wy, x, y);
     }
 
     p.destroy = function () {

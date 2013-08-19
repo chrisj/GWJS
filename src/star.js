@@ -17,7 +17,7 @@
 	p.flux;
 
 	p.initialize = function(x, y) {
-		this.Enemy_initialize(x, y, 15, 200);
+		this.Enemy_initialize(x, y, 15, 200, "yellow");
 		this.rotatesToTarget = false;
 		this.makeAnimations();
 		this.lastFluxTime = 0;
@@ -28,7 +28,7 @@
 	p.makeShape = function () {
 		var g = this.graphics;
 		g.clear();
-		g.setStrokeStyle(2, "round").beginStroke("yellow").drawPolyStar(0, 0, this.radius, 5, .63, 0);
+		g.setStrokeStyle(2, "round").beginStroke(this.color).drawPolyStar(0, 0, this.radius, 5, .63, 0);
 	}
 
 	p.makeAnimations = function () {

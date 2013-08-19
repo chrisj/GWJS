@@ -49,10 +49,6 @@
 		g.beginFill(this.color).drawCircle(0, 0, this.radius);
 	}
 
-	// p.makeAnimations = function () {
-	// 	createjs.Tween.get(this,{loop:false}).to({rotation:360}, 3000);
-	// }
-
 	p.tick = function(event) {
 		this.life -= event.delta;
 
@@ -70,17 +66,17 @@
 
 	window.Particle = Particle;
 
-	function Emitter() {
+	function ParticleEmitter() {
 		this.particlePool = [];
 		this.particleCount = 0;
-		this.totalParticles = 100;
+		this.maximumParticles = 100;
 
-		for (var i = 0; i <this.totalParticles; i++) {
+		for (var i = 0; i < this.maximumParticles; i++) {
 			this.particlePool.push(new Particle())
 		}
 	}
 
-	var ep = Emitter.prototype;
+	var ep = ParticleEmitter.prototype;
 
 	ep.tick = function(event) {
 
@@ -103,7 +99,7 @@
 	}
 
 	ep.addParticle = function(wx, wy, vx, vy, life, color) {
-		if (this.particleCount === this.totalParticles) {
+		if (this.particleCount === this.maximumParticles) {
 			return false;
 		} else {
 			var particle = this.particlePool[this.particleCount];
@@ -115,7 +111,6 @@
 		}
 	}
 
-
-	window.Emitter = Emitter;
+	window.ParticleEmitter = ParticleEmitter;
 
 }(window))
