@@ -112,7 +112,7 @@
             grid.tick(event);
             bulletEmitter.tick(event);
 
-            updateEnemies(event);
+            // updateEnemies(event);
             updateClock(event);
             particleEmitter.tick(event);
 
@@ -156,9 +156,12 @@
     }
 
     function updateClock(event) {
-        var deltaMS = event.runTime - startTime;
-        var deltaS = Math.floor(deltaMS / 1000);
-        clockText.text = deltaS;
+        var ms = event.runTime - startTime;
+        var s = Math.floor(ms / 1000);
+        var m = Math.floor(s / 60);
+        var secondsHand = s % 60;
+
+        clockText.text = ('0' + m).slice(-2) + ':' + ('0' + secondsHand).slice(-2);
     }
 
     function pauseGame() {
