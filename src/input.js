@@ -19,17 +19,24 @@ var leftStickY;
 var rightStickX;
 var rightStickY;
 
-var leftHeld;             //is the user holding a move left command
-var rightHeld;            //is the user holding a move right command
-var upHeld;               //is the user holding a move up command
-var downHeld;             //is the user holding a move down command
-
-var b0Held;
+var leftHeld;
+var rightHeld;
+var upHeld;
+var downHeld;
 
 var shootUpHeld;
 var shootDownHeld;
 var shootLeftHeld;
 var shootRightHeld;
+
+var prev_buttons;
+
+var INACTIVE = 0;
+var HELD = 1;
+var PRESSED = 2;
+var RELEASED = 3;
+
+var buttons_state = [];
 
 function checkGamepad() {
     var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
@@ -52,11 +59,28 @@ function checkGamepad() {
             rightStickX = pad.axes[2];
             rightStickY = pad.axes[3];
 
-            if (b0Held && !pad.buttons[0]) {
-                window.restart();
+            if(prev_buttons) {
+                var button_count = pad.buttons.length;
+
+                for(var i = 0; i < button_count; i++) {
+                    var previous = prev_buttons[i];
+                    var current = pad.buttons[i];
+
+                    if(!previous && !current) {
+                        buttons_state[i] = INACTIVE;
+                    } else if(previous && current) {
+                        buttons_state[i] = HELD;
+                    } else if (!previous && current) {
+                        buttons_state[i] = PRESSED;
+                    } else {
+                        buttons_state[i] = RELEASED;
+                    }
+                }
             }
 
-            b0Held = pad.buttons[0];
+
+            prev_buttons = pad.buttons;
+
         } else {
             // resort to keyboard input
             leftStickX = 0;
@@ -93,6 +117,7 @@ function checkGamepad() {
 
         debug = 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";
         debug += 'RightStick (' + rightStickX + ", " + rightStickY + ")<br/>";
+        debug += 'Buttons (' + buttons_state;
 
         document.getElementById("debug").innerHTML = debug;
     }
@@ -111,7 +136,7 @@ function handleKeyDown(e) {
         case KEYCODE_DOWN:  shootDownHeld = true; return false;
         case KEYCODE_LEFT:  shootLeftHeld = true; return false;
         case KEYCODE_RIGHT: shootRightHeld = true; return false;
-        case KEYCODE_P: pauseGame(); return false;
+        // case KEYCODE_P: pauseGame(); return false;
     }
 }
 
@@ -128,4 +153,8 @@ function handleKeyUp(e) {
         case KEYCODE_LEFT:  shootLeftHeld = false; break;
         case KEYCODE_RIGHT: shootRightHeld = false; break;
     }
+}
+
+function button(n, state) {
+    return buttons_state[n] === state;
 }

@@ -106,6 +106,8 @@
         // input
         checkGamepad();
 
+        handleButtons();
+
         if (!paused) {
             // update game objects
             jet.tick(event);
@@ -118,6 +120,16 @@
 
             // draw
             stage.update();
+        }
+    }
+
+    function handleButtons() {
+        if (button(8, PRESSED)) {
+            restart();
+        }
+
+        if (button(9, PRESSED)) {
+            pauseGame();
         }
     }
 
