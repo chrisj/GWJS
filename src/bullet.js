@@ -93,7 +93,7 @@
             var pVX = bVX + (Math.random() * 10 - 5);
             var pVY = bVY + (Math.random() * 10 - 5);
 
-            window.particleEmitter.addParticle(this.wx, this.wy, pVX/4, pVY/4, 0.5 * 1000, "yellow");
+            window.particleEmitter.addParticle(this.wx, this.wy, pVX/3, pVY/3, 0.5 * 1000, "yellow");
         }
     }
 
