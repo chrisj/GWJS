@@ -1,13 +1,8 @@
 (function (window) {
 	"use strict";
 
-	function Enemy(wx, wy, radius, velocity, color) {
-		this.initialize(wx, wy, radius, velocity, color);
-	}
-
-	var p = Enemy.prototype = new WorldObject();
-
-	p.WorldObject_initialize = p.initialize;
+	var Enemy = WorldObject.makeSubclass();
+	var p = Enemy.prototype;
 
 	p.velocity;
 	p.rotatesToTarget;
@@ -15,7 +10,7 @@
 	p.color
 
 	p.initialize = function(wx, wy, radius, velocity, color) {
-		this.WorldObject_initialize(wx, wy, radius);
+		WorldObject.prototype.initialize.call(this, wx, wy, radius);
 
 		this.velocity = velocity;
 		this.rotatesToTarget = true;
@@ -29,7 +24,6 @@
 	p.makeShape = function () {}
 
 	p.tick = function(event) {
-
 		// move the triangle toward the jet
 		var target = window.jet;
 

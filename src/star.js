@@ -1,23 +1,15 @@
 (function (window) {
 	"use strict";
 
-	var occTime = 0.05 * 1000;
-	var lastFluxTime;
-
-	function Star(x, y) {
-		this.initialize(x, y);
-	}
-
-	var p = Star.prototype = new Enemy();
-
-	p.Enemy_initialize = p.initialize;
+	var Star = Enemy.makeSubclass();
+	var p = Star.prototype;
 
 	p.lastFluxTime;
 	p.occTime;
 	p.flux;
 
 	p.initialize = function(x, y) {
-		this.Enemy_initialize(x, y, 15, 200, "yellow");
+		Enemy.prototype.initialize.call(this, x, y, 15, 200, "yellow");
 		this.rotatesToTarget = false;
 		this.makeAnimations();
 		this.lastFluxTime = 0;
@@ -27,7 +19,6 @@
 
 	p.makeShape = function () {
 		var g = this.graphics;
-		g.clear();
 		g.setStrokeStyle(2, "round").beginStroke(this.color).drawPolyStar(0, 0, this.radius, 5, .63, 0);
 	}
 
@@ -36,7 +27,6 @@
 	}
 
 	// adds a zig zag pattern to movement
-
 	p.tick = function(event) {
 		var target = window.jet;
 

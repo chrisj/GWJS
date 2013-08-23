@@ -1,20 +1,15 @@
 (function (window) {
 	"use strict";
 
-	function WorldObject(wx, wy, radius) {
-		this.initialize(wx, wy, radius);
-	}
-
-	var p = WorldObject.prototype = new createjs.Shape();
-
-	p.Shape_initialize = p.initialize;
+	var WorldObject = createjs.Shape.makeSubclass();
+	var p = WorldObject.prototype;
 
 	p.wx;
 	p.wy;
 	p.radius;
 
 	p.initialize = function(wx, wy, radius) {
-		this.Shape_initialize();
+		createjs.Shape.prototype.initialize.call(this);
 
 		this.wx = wx;
 		this.wy = wy;

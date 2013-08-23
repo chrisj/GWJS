@@ -1,13 +1,8 @@
 (function (window) {
 	"use strict";
 
-	function Bullet(wx, wy, vx, vy) {
-		this.initialize(wx, wy, vx, vy);
-	}
-
-	var p = Bullet.prototype = new WorldObject();
-
-	p.WorldObject_initialize = p.initialize;
+	var Bullet = WorldObject.makeSubclass();
+	var p = Bullet.prototype;
 
 	p.vX;
 	p.vY;
@@ -15,10 +10,9 @@
 	p.speed; // get rid of this since we are already initializing with vx and vy? or do the calculation here
 
 	p.initialize = function(wx, wy, vx, vy) {
-		this.WorldObject_initialize(wx, wy, 4);
+		WorldObject.prototype.initialize.call(this, wx, wy, 4);
 
 		this.speed = 800;
-
 		this.vX = vx * this.speed || 0;
 		this.vY = vy * this.speed || 0;
 		this.decay = 1;

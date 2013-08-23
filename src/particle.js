@@ -1,13 +1,8 @@
 (function (window) {
 	"use strict";
 
-	function Particle(wx, wy, vx, vy, life) {
-		this.initialize(wx, wy, vx, vy);
-	}
-
-	var p = Particle.prototype = new WorldObject();
-
-	p.WorldObject_initialize = p.initialize;
+	var Particle = WorldObject.makeSubclass();
+	var p = Particle.prototype;
 
 	p.vx;
 	p.vy;
@@ -15,7 +10,7 @@
 	p.color
 
 	p.initialize = function(wx, wy, vx, vy, life, color) {
-		this.WorldObject_initialize(wx, wy, 3);
+		WorldObject.prototype.initialize.call(this, wx, wy, 3);
 
 		this.vx = vx || 0;
 		this.vy = vy || 0;

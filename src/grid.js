@@ -1,23 +1,17 @@
 (function (window) {
 	"use strict";
 
-	function Grid() {
-		this.initialize();
-	}
-
-	var p = Grid.prototype = new WorldObject();
-
-	p.WorldObject_initialize = p.initialize;
+	var Grid = WorldObject.makeSubclass();
+	var p = Grid.prototype;
 
 	p.initialize = function() {
-		this.WorldObject_initialize(0, 0);
+		WorldObject.prototype.initialize.call(this, 0, 0);
         this.makeShape();
         this.cache(-5,-5,worldWidth+5, worldHeight+5);
 	}
 
 	p.makeShape = function () {
 		var g = this.graphics;
-		g.clear();
 		g.beginStroke("#ffffff");
 		g.setStrokeStyle(2);
         g.beginFill();

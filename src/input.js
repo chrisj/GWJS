@@ -78,7 +78,6 @@ function checkGamepad() {
                 }
             }
 
-
             prev_buttons = pad.buttons;
 
         } else {

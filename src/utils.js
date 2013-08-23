@@ -2,6 +2,23 @@
 
 // Utilities
 
+// http://stackoverflow.com/questions/1595611/how-to-properly-create-a-custom-object-in-javascript
+Function.prototype.makeSubclass= function() {
+    function Class() {
+        if (!(this instanceof Class)) {
+            throw('Constructor called without "new"');
+        }
+
+        if ('initialize' in this) {
+            this.initialize.apply(this, arguments);
+        }
+    }
+    Function.prototype.makeSubclass.nonconstructor.prototype= this.prototype;
+    Class.prototype= new Function.prototype.makeSubclass.nonconstructor();
+    return Class;
+};
+Function.prototype.makeSubclass.nonconstructor= function() {};
+
 function distanceBetweenPoints(x1, y1, x2, y2) {
 	var dx = x1 - x2;
 	var dy = y1 - y2;

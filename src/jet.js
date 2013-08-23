@@ -1,34 +1,21 @@
 (function (window) {
     "use strict";
 
-	function Jet(wx, wy) {
-		this.initialize(wx, wy);
-	}
+    var Jet = WorldObject.makeSubclass();
+	var p = Jet.prototype;
 
-	var p = Jet.prototype = new WorldObject();
-
-	p.WorldObject_initialize = p.initialize;
 	p.jetBody;
 	p.lastShotTime;
-
-
     p.lastParticleTime;
 
-	p.radius;
-    p.radiusSqr;
-
-    p.emitter;
-
 	p.initialize = function(wx, wy) {
-		this.WorldObject_initialize(wx, wy);
+        WorldObject.prototype.initialize.call(this, wx, wy, 20);
 
         this.x = window.canvasWidth / 2;
         this.y = window.canvasHeight / 2;
 
 		this.lastShotTime = 0;
         this.lastParticleTime = 0;
-		this.radius = 20;
-        this.radiusSqr = this.radius * this.radius;
 
 		this.makeShape();
         this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
@@ -36,9 +23,6 @@
 
 	p.makeShape = function () {
 		var g = this.graphics;
-		g.clear();
-        // g.setStrokeStyle(2, "round").beginStroke("red").drawCircle(0, 0, this.radius);
-
         g.setStrokeStyle(3, "round").beginStroke("orange");
 
         var startAngle = toRadians(40);
@@ -54,7 +38,6 @@
 	}
 
 	p.tick = function (event) {
-
         var leftMagnitude = distanceToOrigin(window.leftStickX, window.leftStickY);
 
         if (leftMagnitude > .3) {
