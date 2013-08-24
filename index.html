@@ -104,12 +104,7 @@
     }
 
     function tick(event) {
-        // input
-        pressed_keys = pressed_keys_buffer;
-        pressed_keys_buffer = [];
-        held_keys = held_keys_buffer.slice(0);
-
-        checkGamepad();
+        pollInput();
         handleButtons();
 
         if (!paused) {

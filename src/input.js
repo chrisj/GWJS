@@ -18,10 +18,32 @@ var held_keys;
 var pressed_keys_buffer = [];
 var held_keys_buffer = [];
 
+var debugText;
+
+function pollInput() {
+    debugText = '<pre>';
+
+    pressed_keys = pressed_keys_buffer;
+    pressed_keys_buffer = [];
+    held_keys = held_keys_buffer.slice(0);
+
+    if (!checkGamepad()) {
+        checkKeyboard();
+    }
+
+    debugText += 'LeftStick           (' + leftStickX + ", " + leftStickY + ")<br/>";
+    debugText += 'RightStick          (' + rightStickX + ", " + rightStickY + ")<br/>";
+    debugText += 'Pressed Keys        (' + pressed_keys + ")<br/>";
+    debugText += 'Pressed Keys Buffer (' + pressed_keys_buffer + ")<br/>";
+    debugText += 'Held Keys           (' + held_keys + ")<br/>";
+    debugText += 'Held Keys Buffer    (' + held_keys_buffer + ")<br/>";
+    debugText += '</pre';
+    document.getElementById("debug").innerHTML = debugText;
+}
+
 function checkGamepad() {
     var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
 
-    var debug = '<pre>';
     if (gamepads.length) {
 
         var pad;
@@ -59,23 +81,14 @@ function checkGamepad() {
             }
             prev_buttons = pad.buttons;
 
-            debug += 'Gamepads id:' + pad.id + "<br/>";
-            debug += 'Buttons (' + buttons_state  + ")<br/>";
+            debugText += 'Gamepads id:' + pad.id + "<br/>";
+            debugText += 'Buttons (' + buttons_state  + ")<br/>";
 
+            return true;
         } else {
-            checkKeyboard();
-            debug += 'NO GAMEPAD' + "<br/>";
+            debugText += 'NO GAMEPAD' + "<br/>";
+            return false;
         }
-
-        debug += 'LeftStick           (' + leftStickX + ", " + leftStickY + ")<br/>";
-        debug += 'RightStick          (' + rightStickX + ", " + rightStickY + ")<br/>";
-        debug += 'Pressed Keys        (' + pressed_keys + ")<br/>";
-        debug += 'Pressed Keys Buffer (' + pressed_keys_buffer + ")<br/>";
-        debug += 'Held Keys           (' + held_keys + ")<br/>";
-        debug += 'Held Keys Buffer    (' + held_keys_buffer + ")<br/>";
-
-        debug += '</pre';
-        document.getElementById("debug").innerHTML = debug;
     }
 }
 
