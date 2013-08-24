@@ -16,7 +16,10 @@ var prev_buttons;
 
 var buttons_state = [];
 
-var keys_state = {};
+var pressed_keys;
+var held_keys;
+var pressed_keys_buffer = [];
+var held_keys_buffer = [];
 
 function checkGamepad() {
     var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
@@ -71,6 +74,11 @@ function checkGamepad() {
         debug += 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";
         debug += 'RightStick (' + rightStickX + ", " + rightStickY + ")<br/>";
 
+        debug += 'Pressed Keys        (' + pressed_keys + ")<br/>";
+        debug += 'Pressed Keys Buffer (' + pressed_keys_buffer + ")<br/>";
+        debug += 'Held Keys           (' + held_keys + ")<br/>";
+        debug += 'Held Keys Buffer    (' + held_keys_buffer + ")<br/>";
+
         document.getElementById("debug").innerHTML = debug;
     }
 }
@@ -121,16 +129,16 @@ function handleKeyDown(e) {
     }
 
     var key_name = codetokeymap[e.keyCode];
-
-    if (keys_state[key_name] !== HELD) {
-        keys_state[codetokeymap[e.keyCode]] = PRESSED;
+    if (!held_keys_buffer.contains(key_name)) {
+        pressed_keys_buffer.push(key_name);
+        held_keys_buffer.push(key_name);
     }
 }
 
 function handleKeyUp(e) {
     //cross browser issues exist
     if(!e){ var e = window.event; }
-    keys_state[codetokeymap[e.keyCode]] = RELEASED;
+    held_keys_buffer.removeItem(codetokeymap[e.keyCode]);
 }
 
 function button(n, state) {
@@ -138,25 +146,10 @@ function button(n, state) {
 }
 
 function key(key_name, state) {
-    if (state === HELD) {
-        var current = keys_state[key_name];
-        return current === HELD || current === RELEASED;
+    if (state === PRESSED) {
+        return pressed_keys.contains(key_name);
+    } else if (state === HELD) {
+        return held_keys.contains(key_name);
     }
-    return keys_state[key_name] === state;
-}
-
-function updateKeyStates() {
-    var codes = Object.keys(keys_state);
-    var length = codes.length;
-
-    for (var i = 0; i < length; i++) {
-        var key_name = codes[i];
-        var state = keys_state[key_name];
-
-        if (state == PRESSED) {
-            keys_state[key_name] = HELD;
-        } else if (state == RELEASED) {
-            keys_state[key_name] = INACTIVE;
-        }
-    }
+    return false;
 }
