@@ -5,15 +5,12 @@ var HELD = 1;
 var PRESSED = 2;
 var RELEASED = 3;
 
-var gamepad;
-
 var leftStickX;
 var leftStickY;
 var rightStickX;
 var rightStickY;
 
 var prev_buttons;
-
 var buttons_state = [];
 
 var pressed_keys;
@@ -24,7 +21,7 @@ var held_keys_buffer = [];
 function checkGamepad() {
     var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
 
-    var debug = '';
+    var debug = '<pre>';
     if (gamepads.length) {
 
         var pad;
@@ -60,7 +57,6 @@ function checkGamepad() {
                     }
                 }
             }
-
             prev_buttons = pad.buttons;
 
             debug += 'Gamepads id:' + pad.id + "<br/>";
@@ -71,20 +67,19 @@ function checkGamepad() {
             debug += 'NO GAMEPAD' + "<br/>";
         }
 
-        debug += 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";
-        debug += 'RightStick (' + rightStickX + ", " + rightStickY + ")<br/>";
-
+        debug += 'LeftStick           (' + leftStickX + ", " + leftStickY + ")<br/>";
+        debug += 'RightStick          (' + rightStickX + ", " + rightStickY + ")<br/>";
         debug += 'Pressed Keys        (' + pressed_keys + ")<br/>";
         debug += 'Pressed Keys Buffer (' + pressed_keys_buffer + ")<br/>";
         debug += 'Held Keys           (' + held_keys + ")<br/>";
         debug += 'Held Keys Buffer    (' + held_keys_buffer + ")<br/>";
 
+        debug += '</pre';
         document.getElementById("debug").innerHTML = debug;
     }
 }
 
 function checkKeyboard() {
-    // resort to keyboard input
     leftStickX = 0;
     leftStickY = 0;
     rightStickX = 0;
@@ -117,9 +112,7 @@ function checkKeyboard() {
     }
 }
 
-//allow for WASD and arrow control scheme
 function handleKeyDown(e) {
-    //cross browser issues exist
     if(!e){ var e = window.event; }
 
     switch(e.keyCode) {
@@ -136,7 +129,6 @@ function handleKeyDown(e) {
 }
 
 function handleKeyUp(e) {
-    //cross browser issues exist
     if(!e){ var e = window.event; }
     held_keys_buffer.removeItem(codetokeymap[e.keyCode]);
 }
