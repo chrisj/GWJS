@@ -14,6 +14,7 @@
     <script type="text/javascript" src="src/triangle.js"></script>
     <script type="text/javascript" src="src/square.js"></script>
     <script type="text/javascript" src="src/star.js"></script>
+    <script type="text/javascript" src="src/keyboard.js"></script>
     <script type="text/javascript" src="src/input.js"></script>
     <script type="text/javascript" src="src/particle.js"></script>
 
@@ -21,7 +22,7 @@
     "use strict";
 
     // display
-    var FPS = 60;
+    var FPS = 5;
     var gridColumns = 16;
     var gridRows = 10;
     var worldWidth;
@@ -113,13 +114,15 @@
             grid.tick(event);
             bulletEmitter.tick(event);
 
-            updateEnemies(event);
+            // updateEnemies(event);
             updateClock(event);
             particleEmitter.tick(event);
 
             // draw
             stage.update();
         }
+
+        updateKeyStates();
     }
 
     function handleButtons() {
@@ -128,6 +131,10 @@
         }
 
         if (button(9, PRESSED)) {
+            pauseGame();
+        }
+
+        if (key("p", PRESSED)) {
             pauseGame();
         }
     }
