@@ -2,8 +2,8 @@
 
 // display
 var FPS = 60;
-var gridColumns = 16;
-var gridRows = 10;
+var gridColumns = 5;
+var gridRows = 5;
 var worldWidth;
 var worldHeight;
 
@@ -14,6 +14,7 @@ var stage;
 var paused = false;
 
 // game elements
+var camera;
 var jet;
 var enemies = [];
 var grid;
@@ -76,6 +77,8 @@ function restart() {
     jet = new Jet(worldWidth / 2, worldHeight / 2);
     stage.addChild(jet);
 
+    camera = new Camera(jet);
+
     grid = new Grid();
     stage.addChild(grid);
 
@@ -89,10 +92,12 @@ function tick(event) {
     if (!paused) {
         // update game objects
         jet.tick(event);
+        camera.tick(event);
+
         grid.tick(event);
         bulletEmitter.tick(event);
 
-        updateEnemies(event);
+        // updateEnemies(event);
         updateClock(event);
         particleEmitter.tick(event);
 

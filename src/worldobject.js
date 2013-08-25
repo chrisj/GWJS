@@ -17,9 +17,9 @@
 	}
 
 	p.updateCanvasPosition = function() {
-		var jet = window.jet;
-		this.x = jet.x + this.wx - jet.wx;
-		this.y = jet.y + this.wy - jet.wy;
+		var target = window.camera.target;
+		this.x = target.x + this.wx - target.wx;
+		this.y = target.y + this.wy - target.wy;
 	}
 
 	p.inWorldBounds = function() {

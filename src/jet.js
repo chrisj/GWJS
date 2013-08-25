@@ -78,19 +78,6 @@
 
             var angle = Math.atan2(vY, vX);
             this.rotation = toDegrees(angle);
-
-            // switch camera focus from jet to staying in bounds
-            if (this.wx <= canvasWidth / 2) {
-                this.x = this.wx;
-            } else if (worldWidth - this.wx <= canvasWidth / 2) {
-                this.x = canvasWidth - (worldWidth - this.wx);
-            }
-
-            if (this.wy <= canvasHeight / 2) {
-                this.y = this.wy;
-            } else if (worldHeight - this.wy <= canvasHeight / 2) {
-                this.y = canvasHeight - (worldHeight - this.wy);
-            }
         }
 
         // fire bullet
