@@ -24,24 +24,26 @@
 	p.makeShape = function () {}
 
 	p.tick = function(event) {
-		// move the triangle toward the jet
-		var target = window.jet;
+		if (this.alive) {
+			// move the triangle toward the jet
+			var target = window.jet;
 
-		var deltax = target.wx - this.wx;
-		var deltay = target.wy - this.wy;
+			var deltax = target.wx - this.wx;
+			var deltay = target.wy - this.wy;
 
-		var angle = Math.atan2(deltay, deltax);
+			var angle = Math.atan2(deltay, deltax);
 
-		this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
-		this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
+			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
+			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
 
-		if (this.rotatesToTarget) {
-			this.rotation = toDegrees(angle);
+			if (this.rotatesToTarget) {
+				this.rotation = toDegrees(angle);
+			}
+
+			this.checkCollision();
+
+			this.updateCanvasPosition();
 		}
-
-		this.checkCollision();
-
-		this.updateCanvasPosition();
 
 		return this.alive;
 	}

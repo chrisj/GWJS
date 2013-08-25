@@ -105,11 +105,9 @@ function handleButtons() {
     if (button(8, PRESSED)) {
         restart();
     }
-
     if (button(9, PRESSED)) {
         pauseGame();
     }
-
     if (key("p", PRESSED)) {
         pauseGame();
     }
@@ -137,14 +135,12 @@ function spawnEnemy(event) {
     var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
     var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
     var randomEnemyType = getRandomInt(0, 2);
-
     var enemy;
     switch(randomEnemyType) {
         case 2: enemy = new Triangle(location[0], location[1]); break;
         case 1: enemy = new Square(location[0], location[1]); break;
         case 0: enemy = new Star(location[0], location[1]); break;
     }
-
     stage.addChild(enemy);
     enemies.push(enemy);
 }
@@ -154,7 +150,6 @@ function updateClock(event) {
     var s = Math.floor(ms / 1000);
     var m = Math.floor(s / 60);
     var secondsHand = s % 60;
-
     clockText.text = ('0' + m).slice(-2) + ':' + ('0' + secondsHand).slice(-2);
 }
 
