@@ -47,6 +47,20 @@ Array.prototype.removeIf = function(condition) {
   return this;
 };
 
+Array.prototype.removeItem = function(item) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] === item) {
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
+};
+
+Array.prototype.contains = function(element) {
+  return this.indexOf(element) > -1;
+}
+
 // Returns a random integer between min and max
 // Using Math.round() will give you a non-uniform distribution!
 function getRandomInt(min, max) {

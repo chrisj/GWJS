@@ -1,47 +1,49 @@
 "use strict";
 
-var KEYCODE_ENTER = 13;
-var KEYCODE_SPACE = 32;
-var KEYCODE_UP = 38;
-var KEYCODE_DOWN = 40;
-var KEYCODE_LEFT = 37;
-var KEYCODE_RIGHT = 39;
-var KEYCODE_W = 87;
-var KEYCODE_A = 65;
-var KEYCODE_S = 83;
-var KEYCODE_D = 68;
-
-var KEYCODE_P = 80; // pause the game
-
-var gamepad
-var leftStickX;
-var leftStickY;
-var rightStickX;
-var rightStickY;
-
-var leftHeld;
-var rightHeld;
-var upHeld;
-var downHeld;
-
-var shootUpHeld;
-var shootDownHeld;
-var shootLeftHeld;
-var shootRightHeld;
-
-var prev_buttons;
-
 var INACTIVE = 0;
 var HELD = 1;
 var PRESSED = 2;
 var RELEASED = 3;
 
+var leftStickX;
+var leftStickY;
+var rightStickX;
+var rightStickY;
+
+var prev_buttons;
 var buttons_state = [];
+
+var pressed_keys;
+var held_keys;
+var pressed_keys_buffer = [];
+var held_keys_buffer = [];
+
+var debugText;
+
+function pollInput() {
+    debugText = '<pre>';
+
+    pressed_keys = pressed_keys_buffer;
+    pressed_keys_buffer = [];
+    held_keys = held_keys_buffer.slice(0);
+
+    if (!checkGamepad()) {
+        checkKeyboard();
+    }
+
+    debugText += 'LeftStick           (' + leftStickX + ", " + leftStickY + ")<br/>";
+    debugText += 'RightStick          (' + rightStickX + ", " + rightStickY + ")<br/>";
+    debugText += 'Pressed Keys        (' + pressed_keys + ")<br/>";
+    debugText += 'Pressed Keys Buffer (' + pressed_keys_buffer + ")<br/>";
+    debugText += 'Held Keys           (' + held_keys + ")<br/>";
+    debugText += 'Held Keys Buffer    (' + held_keys_buffer + ")<br/>";
+    debugText += '</pre';
+    document.getElementById("debug").innerHTML = debugText;
+}
 
 function checkGamepad() {
     var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
 
-    var debug = '';
     if (gamepads.length) {
 
         var pad;
@@ -77,83 +79,82 @@ function checkGamepad() {
                     }
                 }
             }
-
             prev_buttons = pad.buttons;
 
+            debugText += 'Gamepads id:' + pad.id + "<br/>";
+            debugText += 'Buttons (' + buttons_state  + ")<br/>";
+
+            return true;
         } else {
-            // resort to keyboard input
-            leftStickX = 0;
-            leftStickY = 0;
-            rightStickX = 0;
-            rightStickY = 0;
-
-            if (upHeld) {
-                leftStickY -= 1;
-            }
-            if (downHeld) {
-                leftStickY += 1;
-            }
-            if (leftHeld) {
-                leftStickX -= 1;
-            }
-            if (rightHeld) {
-                leftStickX += 1;
-            }
-
-            if (shootUpHeld) {
-                rightStickY -= 1;
-            }
-            if (shootDownHeld) {
-                rightStickY += 1;
-            }
-            if (shootLeftHeld) {
-                rightStickX -= 1;
-            }
-            if (shootRightHeld) {
-                rightStickX += 1;
-            }
+            debugText += 'NO GAMEPAD' + "<br/>";
+            return false;
         }
-
-        debug = 'LeftStick (' + leftStickX + ", " + leftStickY + ")<br/>";
-        debug += 'RightStick (' + rightStickX + ", " + rightStickY + ")<br/>";
-        debug += 'Buttons (' + buttons_state;
-
-        document.getElementById("debug").innerHTML = debug;
     }
 }
 
-//allow for WASD and arrow control scheme
+function checkKeyboard() {
+    leftStickX = 0;
+    leftStickY = 0;
+    rightStickX = 0;
+    rightStickY = 0;
+
+    if (key("w", HELD)) {
+        leftStickY -= 1;
+    }
+    if (key("s", HELD)) {
+        leftStickY += 1;
+    }
+    if (key("a", HELD)) {
+        leftStickX -= 1;
+    }
+    if (key("d", HELD)) {
+        leftStickX += 1;
+    }
+
+    if (key("up", HELD)) {
+        rightStickY -= 1;
+    }
+    if (key("down", HELD)) {
+        rightStickY += 1;
+    }
+    if (key("left", HELD)) {
+        rightStickX -= 1;
+    }
+    if (key("right", HELD)) {
+        rightStickX += 1;
+    }
+}
+
 function handleKeyDown(e) {
-    //cross browser issues exist
     if(!e){ var e = window.event; }
+
     switch(e.keyCode) {
-        case KEYCODE_W:     upHeld = true; return false;
-        case KEYCODE_A:     leftHeld = true; return false;
-        case KEYCODE_S:     downHeld = true; return false;
-        case KEYCODE_D:     rightHeld = true; return false;
-        case KEYCODE_UP:    shootUpHeld = true; return false;
-        case KEYCODE_DOWN:  shootDownHeld = true; return false;
-        case KEYCODE_LEFT:  shootLeftHeld = true; return false;
-        case KEYCODE_RIGHT: shootRightHeld = true; return false;
-        // case KEYCODE_P: pauseGame(); return false;
+        case 37: case 39: case 38:  case 40: // Arrow keys
+        case 32: e.preventDefault(); break; // Space
+        default: break; // do not block other keys
+    }
+
+    var key_name = codetokeymap[e.keyCode];
+    if (!held_keys_buffer.contains(key_name)) {
+        pressed_keys_buffer.push(key_name);
+        held_keys_buffer.push(key_name);
     }
 }
 
 function handleKeyUp(e) {
-    //cross browser issues exist
     if(!e){ var e = window.event; }
-    switch(e.keyCode) {
-        case KEYCODE_W:     upHeld = false; break;
-        case KEYCODE_A:     leftHeld = false; break;
-        case KEYCODE_S:     downHeld = false; break;
-        case KEYCODE_D:     rightHeld = false; break;
-        case KEYCODE_UP:    shootUpHeld = false; break;
-        case KEYCODE_DOWN:  shootDownHeld = false; break;
-        case KEYCODE_LEFT:  shootLeftHeld = false; break;
-        case KEYCODE_RIGHT: shootRightHeld = false; break;
-    }
+    held_keys_buffer.removeItem(codetokeymap[e.keyCode]);
 }
 
 function button(n, state) {
     return buttons_state[n] === state;
+}
+
+function key(key_name, state) {
+    if (state === PRESSED) {
+        return pressed_keys.contains(key_name);
+    } else if (state === HELD) {
+        return held_keys.contains(key_name);
+    }
+    return false;
 }
