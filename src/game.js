@@ -102,13 +102,10 @@ function tick(event) {
 }
 
 function handleButtons() {
-    if (button(8, PRESSED)) {
+    if (button(8, PRESSED) || key("r", PRESSED)) {
         restart();
     }
-    if (button(9, PRESSED)) {
-        pauseGame();
-    }
-    if (key("p", PRESSED)) {
+    if (button(9, PRESSED) || key("p",PRESSED)){
         pauseGame();
     }
 }
