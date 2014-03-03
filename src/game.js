@@ -2,8 +2,8 @@
 
 // display
 var FPS = 60;
-var gridColumns = 5;
-var gridRows = 5;
+var gridColumns = 16;
+var gridRows = 10;
 var worldWidth;
 var worldHeight;
 
@@ -97,7 +97,7 @@ function tick(event) {
         grid.tick(event);
         bulletEmitter.tick(event);
 
-        // updateEnemies(event);
+        updateEnemies(event);
         updateClock(event);
         particleEmitter.tick(event);
 
