@@ -4,7 +4,7 @@
 	var Star = Enemy.makeSubclass();
 	var p = Star.prototype;
 
-	p.lastFluxTime;
+	p.nextFluxTime;
 	p.occTime;
 	p.flux;
 
@@ -12,7 +12,7 @@
 		Enemy.prototype.initialize.call(this, x, y, 15, 200, "yellow");
 		this.rotatesToTarget = false;
 		this.makeAnimations();
-		this.lastFluxTime = 0;
+		this.nextFluxTime = 0;
 		this.occTime = .9 * 1000;
 		this.flux = toRadians(30);
 	}
@@ -27,7 +27,7 @@
 	}
 
 	// adds a zig zag pattern to movement
-	p.tick = function(event) {
+	p.tick = function() {
 		var target = window.jet;
 
 		var deltax = target.wx - this.wx;
@@ -35,13 +35,13 @@
 
 		var angle = Math.atan2(deltay, deltax);
 
-		if (event.runTime - this.lastFluxTime > this.occTime) {
+		if (gameTime > this.nextFluxTime) {
 	    	this.flux *= -1;
-	    	this.lastFluxTime = event.runTime;
+	    	this.nextFluxTime = gameTime + this.occTime;
 		}
 
-		this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle + this.flux);
-		this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle + this.flux);
+		this.wx += (frameTime / 1000) * this.velocity * Math.cos(angle + this.flux);
+		this.wy += (frameTime / 1000) * this.velocity * Math.sin(angle + this.flux);
 
 
 		this.checkCollision();

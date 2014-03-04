@@ -5,8 +5,11 @@
 	var p = Jet.prototype;
 
 	p.jetBody;
-	p.lastShotTime;
-    p.lastParticleTime;
+	p.nextShotTime;
+    p.nextParticleTime;
+    p.nextBombTime;
+    p.bombInterval;
+    p.alive;
 
 	p.initialize = function(wx, wy) {
         WorldObject.prototype.initialize.call(this, wx, wy, 20);
@@ -14,8 +17,11 @@
         this.x = window.canvasWidth / 2;
         this.y = window.canvasHeight / 2;
 
-		this.lastShotTime = 0;
-        this.lastParticleTime = 0;
+		this.nextShotTime = 0;
+        this.nextParticleTime = 0;
+        this.nextBombTime = 0;
+        this.bombInterval = 5 * 1000;
+        this.alive = true;
 
 		this.makeShape();
         this.cache(-this.radius - 2, -this.radius - 2, 2*this.radius + 4, 2*this.radius + 4);
@@ -37,12 +43,12 @@
         g.lineTo(Math.cos(endAngle) * this.radius, Math.sin(endAngle) * this.radius);
 	}
 
-	p.tick = function (event) {
+    p.control = function() {
         var leftMagnitude = distanceToOrigin(window.leftStickX, window.leftStickY);
 
         if (leftMagnitude > .3) {
-        	var vX = (event.delta / 1000) * window.leftStickX * 300;
-        	var vY = (event.delta / 1000) * window.leftStickY * 300;
+            var vX = (frameTime / 1000) * window.leftStickX * 300;
+            var vY = (frameTime / 1000) * window.leftStickY * 300;
 
             if (leftMagnitude > 1) {
                 vX /= leftMagnitude;
@@ -52,12 +58,12 @@
             this.wx += vX;
             this.wy += vY;
 
-            if (event.runTime - this.lastParticleTime > 20) {
+            if (gameTime > this.nextParticleTime) {
                 var pVX = -vX + (Math.random() * 2 - 1);
                 var pVY = -vY + (Math.random() * 2 - 1);
 
                 window.particleEmitter.addParticle(this.wx, this.wy, pVX, pVY, 0.75 * 1000, "orange");
-                this.lastParticleTime = event.runTime;
+                this.nextParticleTime = gameTime + 20;
             }
 
             if (!this.inWorldBoundsX()) {
@@ -69,7 +75,7 @@
             }
 
             if (! this.inWorldBoundsY()) {
-            	if (this.wy > this.radius) {
+                if (this.wy > this.radius) {
                     this.wy = worldHeight - this.radius;
                 } else {
                     this.wy = this.radius;
@@ -81,9 +87,15 @@
         }
 
         // fire bullet
-        if (event.runTime - this.lastShotTime > 200 && distanceToOrigin(window.rightStickX, window.rightStickY) > .3) {
+        if (gameTime > this.nextShotTime && distanceToOrigin(window.rightStickX, window.rightStickY) > .3) {
             this.shoot();
-            this.lastShotTime = event.runTime;
+            this.nextShotTime = gameTime + 200;
+        }
+    }
+
+	p.tick = function () {
+        if (this.alive) {
+            this.control();
         }
     }
 
@@ -109,14 +121,22 @@
         window.bulletEmitter.addBullet(jet.wx, jet.wy, x, y);
     }
 
-    p.destroy = function () {
-        var text = new createjs.Text("EXPLOSION!", "72px Arial", "#ff7700");
-        text.x = window.worldWidth / 2;
-        text.y = window.worldHeight / 2;
-        window.stage.addChild(text);
-        window.stage.update();
+    p.bomb = function () {
+        if (gameTime < this.nextBombTime && this.alive) {
+            return;
+        }
+        this.nextBombTime = gameTime + this.bombInterval;
 
-        window.pauseGame();
+        var increment = 2 * Math.PI / 50;
+        for(var a = 0; a < 2 * Math.PI; a += increment) {
+            window.bulletEmitter.addBullet(this.wx, this.wy, Math.cos(a) / 2.0, Math.sin(a) / 2.0);
+        }
+    }
+
+    p.destroy = function () {
+        this.alive = false;
+        jetDied();
+        this.bomb();
     }
 
 	window.Jet = Jet;

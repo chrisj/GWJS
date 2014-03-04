@@ -23,7 +23,7 @@
 
 	p.makeShape = function () {}
 
-	p.tick = function(event) {
+	p.tick = function() {
 		if (this.alive) {
 			// move the triangle toward the jet
 			var target = window.jet;
@@ -33,8 +33,8 @@
 
 			var angle = Math.atan2(deltay, deltax);
 
-			this.wx += (event.delta / 1000) * this.velocity * Math.cos(angle);
-			this.wy += (event.delta / 1000) * this.velocity * Math.sin(angle);
+			this.wx += (frameTime / 1000) * this.velocity * Math.cos(angle);
+			this.wy += (frameTime / 1000) * this.velocity * Math.sin(angle);
 
 			if (this.rotatesToTarget) {
 				this.rotation = toDegrees(angle);
@@ -48,7 +48,7 @@
 		return this.alive;
 	}
 
-	p.checkCollision = function(event) {
+	p.checkCollision = function() {
 		// check jet
 		var target = window.jet;
 

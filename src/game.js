@@ -22,11 +22,14 @@ var grid;
 var particleEmitter;
 var bulletEmitter;
 
-var lastSpawnTime;
+var nextSpawnTime;
 var timeBetweenSpawns = 0.5 * 1000;
 
 var clockText;
 var startTime;
+
+var frameTime;
+var gameTime;
 
 function init() {
     //register key functions
@@ -62,7 +65,7 @@ function restart() {
     leftStickY = 0;
     rightStickX = 0;
     rightStickY = 0;
-    lastSpawnTime = 0;
+    nextSpawnTime = 0;
 
     clockText = new createjs.Text("0", "40px Arial", "#ff7700");
     clockText.textAlign = "center";
@@ -86,20 +89,24 @@ function restart() {
 }
 
 function tick(event) {
+    gameTime = event.runTime;
+    frameTime = event.delta;
+
     pollInput();
     handleButtons();
 
     if (!paused) {
         // update game objects
-        jet.tick(event);
-        camera.tick(event);
+        jet.tick();
+        camera.tick();
+        grid.tick();
+        bulletEmitter.tick();
 
-        grid.tick(event);
-        bulletEmitter.tick(event);
-
-        updateEnemies(event);
-        updateClock(event);
-        particleEmitter.tick(event);
+        updateEnemies();
+        if (jet.alive) {
+            updateClock();
+        }
+        particleEmitter.tick();
 
         // draw
         stage.update();
@@ -113,18 +120,21 @@ function handleButtons() {
     if (button(9, PRESSED) || key("p",PRESSED)){
         pauseGame();
     }
+    if (button(7, PRESSED) || key("b", PRESSED)) {
+        jet.bomb();
+    }
 }
 
-function updateEnemies(event) {
+function updateEnemies() {
     // spawn enemies
-    if (event.runTime - lastSpawnTime > timeBetweenSpawns) {
+    if (gameTime > nextSpawnTime) {
         spawnEnemy();
-        lastSpawnTime = event.runTime;
+        nextSpawnTime = gameTime + timeBetweenSpawns;
     }
 
     // move enemies
     enemies.removeIf(function(enemy) {
-        if (!enemy.tick(event)) {
+        if (!enemy.tick()) {
             stage.removeChild(enemy);
             return true;
         }
@@ -133,7 +143,7 @@ function updateEnemies(event) {
     });
 }
 
-function spawnEnemy(event) {
+function spawnEnemy() {
     var randomLocations = [[10, 10], [worldWidth - 10, worldHeight - 10], [10, worldHeight - 10], [worldWidth - 10, 10]];
     var location = randomLocations[getRandomInt(0, randomLocations.length - 1)]
     var randomEnemyType = getRandomInt(0, 2);
@@ -147,8 +157,8 @@ function spawnEnemy(event) {
     enemies.push(enemy);
 }
 
-function updateClock(event) {
-    var ms = event.runTime - startTime;
+function updateClock() {
+    var ms = gameTime - startTime;
     var s = Math.floor(ms / 1000);
     var m = Math.floor(s / 60);
     var secondsHand = s % 60;
@@ -157,4 +167,10 @@ function updateClock(event) {
 
 function pauseGame() {
     paused = !paused;
+}
+
+
+function jetDied() {
+    createjs.Tween.removeTweens(clockText);
+    clockText.alpha = 1.0;
 }

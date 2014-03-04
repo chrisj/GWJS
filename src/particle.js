@@ -44,8 +44,8 @@
 		g.beginFill(this.color).drawCircle(0, 0, this.radius);
 	}
 
-	p.tick = function(event) {
-		this.life -= event.delta;
+	p.tick = function() {
+		this.life -= frameTime;
 
 		if (this.life > 0) {
 			this.wx += this.vx
@@ -73,13 +73,13 @@
 
 	var ep = ParticleEmitter.prototype;
 
-	ep.tick = function(event) {
+	ep.tick = function() {
 
 		var i = 0;
 
 		while (i < this.particleCount) {
 			var particle = this.particlePool[i];
-			if (particle.tick(event)) {
+			if (particle.tick()) {
 				i++;
 			} else {
 				window.stage.removeChild(particle);

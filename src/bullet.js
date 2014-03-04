@@ -35,9 +35,9 @@
 		g.beginFill("yellow").drawCircle(0, 0, this.radius);
 	}
 
-	p.tick = function(event) {
-		this.wx += (event.delta / 1000) * this.vX;
-		this.wy += (event.delta / 1000) * this.vY;
+	p.tick = function() {
+		this.wx += (frameTime / 1000) * this.vX;
+		this.wy += (frameTime / 1000) * this.vY;
 
 		this.updateCanvasPosition();
 		this.reflect();
@@ -45,7 +45,7 @@
 		if(this.decay > 0) {
 			return true;
 		} else {
-			this.death(event);
+			this.death();
 			return false;
 		}
 	}
@@ -79,9 +79,9 @@
     	return false;
     }
 
-    p.death = function(event) {
-    	var bVX = (event.delta / 1000) * this.vX;
-        var bVY = (event.delta / 1000) * this.vY;
+    p.death = function() {
+    	var bVX = (frameTime / 1000) * this.vX;
+        var bVY = (frameTime / 1000) * this.vY;
 
         for(var i = 0; i < 3; i++) {
             var pVX = bVX + (Math.random() * 10 - 5);
@@ -96,7 +96,7 @@
 	function BulletEmitter() { // TODO: combine this with particle emitter
 		this.bulletPool = [];
 		this.bulletCount = 0;
-		this.maximumBullets = 100;
+		this.maximumBullets = 500;
 
 		for (var i = 0; i < this.maximumBullets; i++) {
 			this.bulletPool.push(new Bullet())
@@ -105,13 +105,13 @@
 
 	var ep = BulletEmitter.prototype;
 
-		ep.tick = function(event) {
+		ep.tick = function() {
 
 		var i = 0;
 
 		while (i < this.bulletCount) {
 			var bullet = this.bulletPool[i];
-			if (bullet.tick(event)) {
+			if (bullet.tick()) {
 				i++;
 			} else {
 				window.stage.removeChild(bullet);
