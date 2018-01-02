@@ -42,7 +42,7 @@ function pollInput() {
 }
 
 function checkGamepad() {
-    var gamepads = (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
+    var gamepads = navigator.getGamepads();
 
     if (gamepads.length) {
 
